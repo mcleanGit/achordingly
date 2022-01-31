@@ -19,8 +19,10 @@ fetch(apiCategories)
 // when use selects a category, populate container div with associated entries
 var filteredEntries = []
 $( "#category" ).change(function() {
+    $('.container').empty()
     var cat = $("#category option:selected").text()
     for(i=0;i<entries.length;i++){
+        
         if(entries[i].Category === cat){
             var api = entries[i].API
             var description = entries[i].Description
