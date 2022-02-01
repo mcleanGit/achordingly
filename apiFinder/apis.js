@@ -21,38 +21,66 @@ fetch(categories)
 // when user selects a category, populate container div with associated entries
 var filteredEntries = []
 var auths = []
+var httpOpt = []
+var cors = []
 var cat;
 function populate(filter){
     if(filter){
-        if(filter === 'none'){
-            filter = ''
-        }
+        console.log(filterOpts)
+        // if(filter === 'none'){
+        //     filter = ''
+        // }
         // clear the contents of the container div each time this function is called
         $('.container').empty()
-
+        var accepted = false
         for(i=0;i<entries.length;i++){
+            var entry = entries[i]
             // whenever an api matches the user-chosen category...
-            if(entries[i].Category === cat && entries[i].Auth === filter){
-                // get each value 
-                var api = entries[i].API
-                var description = entries[i].Description
-                // might want these later
-                // var auth = entries[i].Auth
-                // var secure = entries[i].HTTPS
-                var link = entries[i].Link
-                // then append the values as html-formatted to the .container div
-                $( `<p data-api="${api}"><a href="${link}" target=_blank>${api}:</a> ${description} </p>` ).appendTo( ".container" );
-                filteredEntries.push(entries[i])
+            if(entry.Category === cat){
+                // check filters
+                // auth?
+                if(filterOpts.auth != false && filterOpts.auth === entry.Auth){
+                    accepted = true
+                } 
+                // http?
+                if(filterOpts.http != null && filterOpts.http === entry.HTTPS){
+                    accepted = true
+                    console.log('flagg')
+                } 
+                // cors?
+                if(filterOpts.cors != false && filterOpts.cors === entry.Cors){
+                    accepted = true
+                }
+
+                if (accepted === true){
+                    var api = entries[i].API
+                    var description = entries[i].Description
+                    // might want these later
+                    // var auth = entries[i].Auth
+                    // var secure = entries[i].HTTPS
+                    var link = entries[i].Link
+                    // then append the values as html-formatted to the .container div
+                    $( `<p data-api="${api}"><a href="${link}" target=_blank>${api}:</a> ${description} </p>` ).appendTo( ".container" );
+                    filteredEntries.push(entries[i])
+                }
+
             }
         }
     } else {
         // clear the contents of the container div each time this function is called
         $('.container').empty()
         $('#auth').remove()
+        $('#httpOpt').remove()
+        $('#cors').remove()
 
         auths.length = 0
+        cors.length = 0
+        httpOpt.length = 0
+
         // add filter menus 
         $('.demo').append('<select name="auth" id="auth"><option disabled selected>Please select authorization</option><option>Reset</option>')
+        $('.demo').append('<select name="httpOpt" id="httpOpt"><option disabled selected>Please select HTTP/S</option><option>Reset</option>')
+        $('.demo').append('<select name="cors" id="cors"><option disabled selected>Please select CORS choice</option><option>Reset</option>')
         // $('<select>').html('name="auth" id="auth"><option disabled selected>Please select authorization</option>').appendTo('#demo');
         // get the category that the user selected
         cat = $("#category option:selected").text()
@@ -70,6 +98,9 @@ function populate(filter){
                 // then append the values as html-formatted to the .container div
                 $( `<p data-api="${api}"><a href="${link}" target=_blank>${api}:</a> ${description} </p>` ).appendTo( ".container" );
                 filteredEntries.push(entries[i])
+
+                console.log()
+                // get auth option
                 var thisAuth = entries[i].Auth
                 if(thisAuth === ''){
                     thisAuth = 'none'
@@ -77,11 +108,39 @@ function populate(filter){
                 if(!auths.includes(thisAuth)){
                     auths.push(thisAuth)
                 }
+                // get http/s option
+                var httpO = entries[i].HTTPS
+                if(!httpOpt.includes(httpO)){
+                    httpOpt.push(httpO)
+                }
+                // get cors option
+                var corsOpt = entries[i].Cors
+                if(corsOpt === ''){
+                    corsOpt = 'none'
+                }
+                if(!cors.includes(corsOpt)){
+                    cors.push(corsOpt)
+                }
             }
         }
         for(i=0;i<auths.length;i++){
             
             $('<option/>').val(auths[i]).html(auths[i]).appendTo('#auth');
+        }
+
+        for(i=0;i<httpOpt.length;i++){       
+            var bool = httpOpt[i]
+            if(bool === true){
+                bool = 'Yes'
+            }else {
+                bool = 'No'
+            }
+            $('<option/>').val(bool).html(bool).appendTo('#httpOpt');
+        }
+
+        for(i=0;i<cors.length;i++){
+            
+            $('<option/>').val(cors[i]).html(cors[i]).appendTo('#cors');
         }
     }
     
@@ -97,15 +156,48 @@ $( ".container" ).click(function(event) {
     }
 })
 
+var filterOpts = {
+    auth: false,
+    http: null,
+    cors: false
+}
+
 $( ".demo" ).change(function(event) {
     console.log(event.target)
     switch(event.target.name){
         case 'auth':
-            auth = $("#auth option:selected").text()
-            if(auth === 'Reset'){
+            opt = $("#auth option:selected").text()
+            filterOpts.auth = opt
+            if(opt === 'Reset'){
+                filterOpts.auth = false
                 populate()
             } else {
-                populate(auth)
+                populate('filter')
+            }
+        break
+        case 'httpOpt':
+            opt = $("#httpOpt option:selected").text()
+            if(opt === 'Yes'){
+                opt = true
+            }else {
+                opt = false
+            }
+            filterOpts.http = opt
+            if(opt === 'Reset'){
+                filterOpts.http = null
+                populate()
+            } else {
+                populate('filter')
+            }
+        break
+        case 'cors':
+            opt = $("#cors option:selected").text()
+            filterOpts.cors = opt
+            if(opt === 'Reset'){
+                filterOpts.cors = false
+                populate()
+            } else {
+                populate('filter')
             }
         break
 
