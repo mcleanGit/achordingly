@@ -1,7 +1,12 @@
-# apiapi
-public api project
+Team: Cinco Swim
 
+Members & Roles: 
+Aziz: CSS, UX, Make it look good
+William: Javascript
+Echeta: HTML, open/flexible
+Michael: API, JS. 
+Don: UX, API
 
-## idea candidates
-a public api explorer. user can search for apis based on keywords (possible other filtering). list results, then once one is chosen the site dynamically generates a UI for chosen api. 
-- given https://api.publicapis.org/entries
+Description: How can I find chords for a specific song, and in particular filter by number of chords. Useful for beginners who only know two or three chords. 
+
+Link for the repo: https://github.com/michaelpalumbo/apiapi
