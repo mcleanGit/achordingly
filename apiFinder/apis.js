@@ -24,12 +24,9 @@ var auths = []
 var httpOpt = []
 var cors = []
 var cat;
+var selectedEntries = []
 function populate(filter){
     if(filter){
-        console.log(filterOpts)
-        // if(filter === 'none'){
-        //     filter = ''
-        // }
         // clear the contents of the container div each time this function is called
         $('.container').empty()
         var accepted = false
