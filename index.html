@@ -23,18 +23,19 @@
     </head>
     <body>
     
-        <div class="demo">
-        
-            <!-- <form action="#">
-            
-            <fieldset>        
-                <label for="category">API Category</label>
-                <select name="category" id="category">
-                <option disabled selected>Please select an API Category</option>
-                </select>
-            </fieldset>
-            
-            </form>  -->
+        <div class="progressionSetup">
+            <label for="key">Choose a key</label>
+            <select name="key" id="key">
+                <option disabled selected>Please select a Key</option>
+                <option data-key="cmaj">C Major</option>
+                <option data-key="gmaj">G Major</option>
+            </select>
+
+            <label for="chord1">Choose a chord to start the song on</label>
+            <select name="chord1" id="chord1">
+                <option disabled selected>Select starting chord</option>
+            </select>
+        </div>
         <div id="dialog" class="signin" title="Hooktheory Login">
             <p>Please sign in to your Hooktheory Account.</p>
 
@@ -49,6 +50,9 @@
             <a href="https://www.hooktheory.com/user/username" target="_blank">Forgot Username?</a></p>
 
         </div>
+
+
+
         <!-- search results get appended here -->
         <div class="container"></div>
     
