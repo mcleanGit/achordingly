@@ -25,7 +25,7 @@
     
         <div class="demo">
         
-            <form action="#">
+            <!-- <form action="#">
             
             <fieldset>        
                 <label for="category">API Category</label>
@@ -33,23 +33,26 @@
                 <option disabled selected>Please select an API Category</option>
                 </select>
             </fieldset>
-            <!-- <fieldset>        
-                <label for="auth">Authorization?</label>
-                <select name="auth" id="auth">
-                <option disabled selected>Please select authorization</option>
-
-                </select>
-            </fieldset> -->
             
-            </form>
-        
+            </form>  -->
+        <div id="dialog" title="Hooktheory Login">
+            <input class="username" id="username" value="Enter Username"> 
+            <p>Please sign in to your Hooktheory Account.</p>
+            <p>Need an account? <a href="https://www.hooktheory.com/signup" target="_blank">Sign Up</a></p>
+
+            <p><a href="https://www.hooktheory.com/user/password" target="_blank">Forgot Password?</a></p>
+
+            <a href="https://www.hooktheory.com/user/username" target="_blank">Forgot Username?</a></p>
+
         </div>
         <!-- search results get appended here -->
         <div class="container"></div>
     
         <script src="./assets/js/progressions.js"></script>
         <script>
-            
+            $( function() {
+                $( "#dialog" ).dialog();
+            } );
         </script>
     </body>
 </html>
