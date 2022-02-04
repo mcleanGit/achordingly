@@ -116,32 +116,37 @@ $( ".progressionSetup" ).change(function(event) {
 //     'Access-Control-Allow-Origin':'*'
 //   }
 // https://chriscastle.com/proxy/index.php?:proxy:
-
+        // body: JSON.stringify(credentials),
+        // headers: {
+        //     'Content-Type': 'application/json',
+        //     'Accept': 'application/json',
+        //     'Authorization': 'Bearer ' + sessionAuth.activkey,
+        //     'Access-Control-Allow-Origin':'*'
+        // }
 
 function nextChord(childPath){
     // var url = 'https://api.hooktheory.com/v1/trends/nodes?cp=' + childPath
-    var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${childPath}&bearer=${sessionAuth.activkey}&nodes=1`
+    var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${childPath}&bearer=${sessionAuth.activkey}&nodes`
+    console.log('url', url)
     console.log('Bearer ' + sessionAuth.activkey)
     // request a probable chord given first chord degree
-    fetch(url, {
-        // mode: 'no-cors',
-        method: 'POST',
-        body: JSON.stringify(credentials),
+    fetch(url,{
+        
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer ' + sessionAuth.activkey,
-            'Access-Control-Allow-Origin':'*'
+            // 'Authorization': 'Bearer ' + sessionAuth.activkey,
+            // 'Access-Control-Allow-Origin':'*'
         }
     })
     .then(function (resp) {
         console.log('resp', resp)
         // Return the response as JSON
-        return resp;
+        return resp.json();
 
     }).then(function (data) {
 
-        console.log('135', data.body.json())
+        console.log('final', data)
     }).catch(function (err) {
 
         // Log any errors
