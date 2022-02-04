@@ -17,6 +17,7 @@ $( ".password" ).click(function(event) {
 $( ".login" ).click(function(event) {
     credentials.username = $("#username").val()
     credentials.password = $("#password").val()
+    systemMsg('Logging in...')
     auth()
     // localStorage.setItem(JSON.stringify(credentials))
 })
@@ -40,12 +41,12 @@ function auth(){
     }).then(function (data) {
     
         // Log the API data
-        console.log('token', data);
         if(data.name === 'Unauthorized'){
             alert(data.message)
         }
         if(data.username === credentials.username){
             // it worked
+            systemMsg('Signed In!')
             sessionAuth = data
             console.log(sessionAuth)
             // hide the login dialog
@@ -61,74 +62,55 @@ function auth(){
     })
 }
 
-// for now, store cmaj in an array. 
 // TODO find either an api or a json that contains note names per each scale
-var scales = {
-    cmaj: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
-    gmaj: ['G', 'A', 'B', 'C', 'D', 'E', 'F#']
-}
 
+var keys = {
+    major: ['C', 'C#/Bb', 'D', 'D#/Eb', 'E', 'F', 'F#Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'],
+    minor: ['C', 'C#/Bb', 'D', 'D#/Eb', 'E', 'F', 'F#Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B']
+}
+// this will be confusing... key & keys refer to the object, not in music theory
+Object.keys(keys).forEach(key => {
+    for(i=0;i<keys[key].length; i++){
+        var quality = key
+        var thisKey = keys[key][i]
+        var text = thisKey + ' ' +  quality
+        var val = thisKey + '_' + quality
+        $('<option/>').val(val).html(text).appendTo('#chord1');
+    }
+})
 // watch for key & other chord choices
-var song = {
+
+var changes = {
     key: null,
     scale: null,
     progression: [],
     chord1: {
         name: null,
+        degree: 1 //hardcoded for now
+    },
+    chord2:{
+        name: null,
         degree: null
     }
 }
-$( ".progressionSetup" ).change(function(event) {
-    console.log(event.target.name)
+$( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
-        case 'key':
-            song.key = $("#key option:selected").text()
-            song.scale = scales[$("#key option:selected").attr('data-key')]
-            // if we decide to incorporate other scale types. use major for now... 
-            var degrees = scaleDegrees.major
-
-            // clear the chord choices in chord1
-            function removeOptions(selectElement) {
-                var i, L = selectElement.options.length - 1;
-                for(i = L; i >= 0; i--) {
-                   selectElement.remove(i);
-                }
-             }
-            removeOptions(document.getElementById('chord1'))
-
-            // populate the chord selection with scale
-            for(i=0;i<song.scale.length;i++){       
-                $('<option/>').val(song.scale[i]).html(song.scale[i]).appendTo('#chord1');
-            }
-        break
         case 'chord1':
-            song.chord1.name = $("#chord1 option:selected").text()
-            song.chord1.degree = $("#chord1").prop('selectedIndex') + 1
-            nextChord(song.chord1.degree)
+            changes.chord1.name = $("#chord1 option:selected").text()
+            //changes.chord1.degree = $("#chord1").prop('selectedIndex') + 1
+            console.log(changes)
+            // chord column number here is 2, scale degree, chord name
+            nextChord(2, changes.chord1.degree, changes.chord1.name)
         break
      
     }
 
 })
 
-//   mode: 'cors',
-//   headers: {
-//     'Access-Control-Allow-Origin':'*'
-//   }
-// https://chriscastle.com/proxy/index.php?:proxy:
-        // body: JSON.stringify(credentials),
-        // headers: {
-        //     'Content-Type': 'application/json',
-        //     'Accept': 'application/json',
-        //     'Authorization': 'Bearer ' + sessionAuth.activkey,
-        //     'Access-Control-Allow-Origin':'*'
-        // }
-
-function nextChord(childPath){
+function nextChord(chordNumber, degree, name){
+    systemMsg('Accessing chord database, please wait...')
     // var url = 'https://api.hooktheory.com/v1/trends/nodes?cp=' + childPath
-    var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${childPath}&bearer=${sessionAuth.activkey}&nodes`
-    console.log('url', url)
-    console.log('Bearer ' + sessionAuth.activkey)
+    var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${degree}&bearer=${sessionAuth.activkey}&nodes`
     // request a probable chord given first chord degree
     fetch(url,{
         headers: {
@@ -137,17 +119,46 @@ function nextChord(childPath){
         }
     })
     .then(function (resp) {
-        console.log('resp', resp)
         // Return the response as JSON
         return resp.json();
 
     }).then(function (data) {
 
         console.log('final', data)
+        suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
         // Log any errors
         console.log('something went wrong', err);
 
     })
+}
+
+function suggestChord(chordNumber, name, probabilities){
+    switch(chordNumber){
+        case 2:
+            // reset the selectmenu
+            clearChord2()
+            // create the selectmenu
+            for(i=0;i<6;i++){
+                $('<option/>').val(probabilities[i].chord_HTML).html(probabilities[i].chord_HTML).appendTo('#chord2');
+            }
+            systemMsg('Chord suggestions returned!')
+        break
+        // add case 3 for if we want a third column for a chord... 
+    }
+}
+
+function clearChord2(){
+    function removeOptions(selectElement) {
+        var i, L = selectElement.options.length - 1;
+        for(i = L; i >= 0; i--) {
+            selectElement.remove(i);
+        }
+        }
+    removeOptions(document.getElementById('chord2'))
+}
+
+function systemMsg(msg){
+    $('.systemMsg').text(msg)
 }

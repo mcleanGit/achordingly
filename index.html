@@ -22,20 +22,26 @@
 
     </head>
     <body>
-        Dev Note: Need to sign in first before using these drop-downs. eventually these won't appear until signin is successful... 
-        <div class="progressionSetup">
-            <label for="key">Choose a key</label>
+
+        <div class="chordSetup">
+            <!-- <label for="key">Choose a key</label>
             <select name="key" id="key">
                 <option disabled selected>Please select a Key</option>
                 <option data-key="cmaj">C Major</option>
                 <option data-key="gmaj">G Major</option>
                 
-            </select>
-
+            </select> -->
+            <div class="systemMsg" id="systemMsg"></div>
             <label for="chord1">Choose your first</label>
             <select name="chord1" id="chord1">
                 <option disabled selected>Select starting chord</option>
             </select>
+
+            <label for="chord2">Suggested Chord</label>
+            <select name="chord2" id="chord2">
+                <option disabled selected>Select starting chord</option>
+            </select>
+        
         </div>
         <div id="dialog" class="signin" title="Hooktheory Login">
             <p>Please sign in to your Hooktheory Account.</p>
