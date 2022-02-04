@@ -97,6 +97,17 @@ $( ".chordSetup" ).change(function(event) {
             changes.chord1.name = $("#chord1 option:selected").text()
             changes.key = changes.chord1.name.split(' ')[0]
             changes.chord1.quality = changes.chord1.name.split(' ')[1]
+            var chord;
+            if(changes.chord1.quality === 'major'){
+                chord = changes.key
+            } else {
+                chord = changes.key + 'm'
+            }
+            console.log(chord)
+            // try adding chord diagram for guitar
+            var guitarDiagram = `<ins class="scales_chords_api" chord="${chord}"></ins>`
+            console.log(guitarDiagram)
+            $('.scales_chords_api').attr('chord', chord);
             // clear any suggested chord2 content
             clearChord2()
             // chord column number here is 2, scale degree, chord name
