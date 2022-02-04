@@ -48,7 +48,6 @@ function auth(){
             // it worked
             systemMsg('Signed In!')
             sessionAuth = data
-            console.log(sessionAuth)
             // hide the login dialog
             $( "#dialog" ).hide( "slow", function() {
                 $('#dialog').dialog('close')
@@ -57,7 +56,7 @@ function auth(){
     }).catch(function (err) {
     
         // Log any errors
-        console.log('something went wrong', err);
+        console.log('Error in auth fetch: ', err);
     
     })
 }
@@ -90,17 +89,23 @@ var changes = {
     },
     chord2:{
         name: null,
-        degree: null
+        degree: null,
+        numeral: null
     }
 }
 $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
             changes.chord1.name = $("#chord1 option:selected").text()
-            //changes.chord1.degree = $("#chord1").prop('selectedIndex') + 1
-            console.log(changes)
+
+            // clear any suggested chord2 content
+            clearChord2()
             // chord column number here is 2, scale degree, chord name
             nextChord(2, changes.chord1.degree, changes.chord1.name)
+        break
+        case 'chord2':
+            changes.chord2.numeral = $("#chord2 option:selected").text()
+            $('.chord2diagram').text('guitar diagram: ' + changes.chord2.numeral)
         break
      
     }
@@ -124,12 +129,12 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        console.log('final', data)
+        // console.log('final', data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
         // Log any errors
-        console.log('something went wrong', err);
+        console.log('error in nextChord fetch: ', err);
 
     })
 }
@@ -150,6 +155,7 @@ function suggestChord(chordNumber, name, probabilities){
 }
 
 function clearChord2(){
+    $('.chord2diagram').text('')
     function removeOptions(selectElement) {
         var i, L = selectElement.options.length - 1;
         for(i = L; i >= 0; i--) {
