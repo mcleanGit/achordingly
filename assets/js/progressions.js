@@ -73,7 +73,10 @@ var song = {
     key: null,
     scale: null,
     progression: [],
-    chord1: null
+    chord1: {
+        name: null,
+        degree: null
+    }
 }
 $( ".progressionSetup" ).change(function(event) {
     console.log(event.target.name)
@@ -92,21 +95,60 @@ $( ".progressionSetup" ).change(function(event) {
                 }
              }
             removeOptions(document.getElementById('chord1'))
-            
+
             // populate the chord selection with scale
             for(i=0;i<song.scale.length;i++){       
                 $('<option/>').val(song.scale[i]).html(song.scale[i]).appendTo('#chord1');
             }
         break
         case 'chord1':
-            song.chord1 = $("#chord1 option:selected").text()
-            console.log(song)
+            song.chord1.name = $("#chord1 option:selected").text()
+            song.chord1.degree = $("#chord1").prop('selectedIndex') + 1
+            nextChord(song.chord1.degree)
         break
      
     }
 
 })
 
+//   mode: 'cors',
+//   headers: {
+//     'Access-Control-Allow-Origin':'*'
+//   }
+// https://chriscastle.com/proxy/index.php?:proxy:
+
+
+function nextChord(childPath){
+    // var url = 'https://api.hooktheory.com/v1/trends/nodes?cp=' + childPath
+    var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${childPath}&bearer=${sessionAuth.activkey}&nodes=1`
+    console.log('Bearer ' + sessionAuth.activkey)
+    // request a probable chord given first chord degree
+    fetch(url, {
+        // mode: 'no-cors',
+        method: 'POST',
+        body: JSON.stringify(credentials),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + sessionAuth.activkey,
+            'Access-Control-Allow-Origin':'*'
+        }
+    })
+    .then(function (resp) {
+        console.log('resp', resp)
+        // Return the response as JSON
+        return resp;
+
+    }).then(function (data) {
+
+        console.log('135', data.body.json())
+    }).catch(function (err) {
+
+        // Log any errors
+        console.log('something went wrong', err);
+
+    })
+}
 
 var scaleDegrees = {
     "lydian": "1 2 3 4# 5 6 7",
