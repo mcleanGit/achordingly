@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Api Explorer</title>
+        <title>Chord Changing Practice Thigamajig</title>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
         <style>
             fieldset {
@@ -24,13 +24,6 @@
     <body>
 
         <div class="chordSetup">
-            <!-- <label for="key">Choose a key</label>
-            <select name="key" id="key">
-                <option disabled selected>Please select a Key</option>
-                <option data-key="cmaj">C Major</option>
-                <option data-key="gmaj">G Major</option>
-                
-            </select> -->
             <div class="systemMsg" id="systemMsg"></div>
             <label for="chord1">Choose your first</label>
             <select name="chord1" id="chord1">
@@ -44,26 +37,18 @@
             <div id="chord2diagram" class="chord2diagram"></div>
         
         </div>
+        
         <div id="dialog" class="signin" title="Hooktheory Login">
             <p>Please sign in to your Hooktheory Account.</p>
-
             <input class="username" id="username" value="Enter Username"> 
             <p>
             <input type="password" class="password" id="password" value="Enter Password"> 
             <button class="login" id="login">Login</button>
             <p>Need an account? <a href="https://www.hooktheory.com/signup" target="_blank">Sign Up</a></p>
-
             <p><a href="https://www.hooktheory.com/user/password" target="_blank">Forgot Password?</a></p>
-
             <a href="https://www.hooktheory.com/user/username" target="_blank">Forgot Username?</a></p>
-
         </div>
-
-
-
-        <!-- search results get appended here -->
-        <div class="container"></div>
-    
+        
         <script src="./assets/js/progressions.js"></script>
         <script>
             $( function() {
