@@ -79,7 +79,7 @@ Object.keys(keys).forEach(key => {
 })
 // watch for key & other chord choices
 //! for william: this will be what gets saved in the user's progression save
-var changes = {
+var progression = {
     key: null,
     scale: [],
     progression: [],
@@ -100,17 +100,17 @@ var changes = {
 $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
-            changes.chord1.name = $("#chord1 option:selected").text()
-            changes.key = changes.chord1.name.split(' ')[0]
-            changes.chord1.quality = changes.chord1.name.split(' ')[1]
+            progression.chord1.name = $("#chord1 option:selected").text()
+            progression.key = progression.chord1.name.split(' ')[0]
+            progression.chord1.quality = progression.chord1.name.split(' ')[1]
             // clear any suggested chord2 content
             clearChord2()
             // chord column number here is 2, scale degree, chord name
-            nextChord(2, changes.chord1.degree, changes.chord1.name)
+            nextChord(2, progression.chord1.degree, progression.chord1.name)
         break
         case 'chord2':
-            changes.chord2.numeral = $("#chord2 option:selected").text()
-            $('.chord2diagram').text('guitar diagram: ' + changes.chord2.numeral)
+            progression.chord2.numeral = $("#chord2 option:selected").text()
+            $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
         break
      
     }
