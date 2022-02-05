@@ -135,7 +135,7 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        // console.log('final', data)
+        console.log(chordNumber, name, data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
