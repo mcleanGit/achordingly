@@ -35,7 +35,7 @@ if(localStorage.getItem('username') === null){
         show: { effect: "blind", duration: 500 }
       });
 } else {
-    console.log('test')
+    
     $( "#dialog" ).hide()
     // get credentials
     credentials.username = localStorage.getItem('username')
@@ -161,9 +161,11 @@ $( ".chordSetup" ).change(function(event) {
             switch(progression.chord1.quality){
                 case 'major':
                     progression.keyInfo = Tonal.Key.majorKey(progression.key)
+
                 break;
                 case 'minor':
                     progression.keyInfo = Tonal.Key.minorKey(progression.key)
+
                 break;
             }
             
@@ -182,10 +184,10 @@ $( ".chordSetup" ).change(function(event) {
 })
 
 function nextChord(chordNumber, degree, name){
-    console.log(chordNumber, degree, name)
+    
     systemMsg('Accessing chord database, please wait...')
     var bearerToken = localStorage.getItem("hookTheoryBearerToken")
-    console.log(bearerToken)
+    
     // var url = 'https://api.hooktheory.com/v1/trends/nodes?cp=' + childPath
     var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${degree}&bearer=${bearerToken}&nodes`
     // request a probable chord given first chord degree
@@ -201,7 +203,7 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        console.log(chordNumber, name, data)
+        
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
@@ -228,10 +230,19 @@ function suggestChord(chordNumber, name, probabilities){
                 if(/\d/.test(num) === true){
                   num = num.split(/[0-9]/)[0] // + quality + num.split(/[0-9]/)[1]
                 } 
-                // find the scale index of the number
-                index = progression.keyInfo.grades.indexOf(num)
-                // get chord name given scale index and key chord array
-                chordName = progression.keyInfo.chords[index]
+                // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
+                var index;
+                if(progression.keyInfo.type === 'major'){
+                    var step = chord.step
+                    // get chord name given scale index and key chord array
+                    chordName = progression.keyInfo.chords[step]
+                } else {
+                    var step = chord.step
+                    // get chord name given scale index and key chord array
+                    chordName = progression.keyInfo.natural.chords[step]
+                }
+                
+
                 // add chord names to the chord2 dropdown menu
                 $('<option/>').val(chordName).html(chordName).appendTo('#chord2');
             }
