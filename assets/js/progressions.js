@@ -178,6 +178,7 @@ $( ".chordSetup" ).change(function(event) {
 })
 
 function nextChord(chordNumber, degree, name){
+    console.log(chordNumber, degree, name)
     systemMsg('Accessing chord database, please wait...')
     var bearerToken = localStorage.getItem("hookTheoryBearerToken")
     console.log(bearerToken)
@@ -224,7 +225,7 @@ function suggestChord(chordNumber, name, probabilities){
                   num = num.split(/[0-9]/)[0] // + quality + num.split(/[0-9]/)[1]
                 } 
                 // find the scale index of the number
-                index = key.grades.indexOf(num)
+                index = progression.keyInfo.grades.indexOf(num)
                 // get chord name given scale index and key chord array
                 chordName = progression.keyInfo.chords[index]
                 // add chord names to the chord2 dropdown menu
