@@ -112,7 +112,7 @@ function oAuth(dialog){
 // MUSIC THEORY STUFF
 // TODO find either an api or a json that contains note names per each scale
 var keys = {
-    major: ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'],
+    major: ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'],
     minor: ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B']
 }
 
@@ -151,6 +151,10 @@ $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
             progression.chord1.name = $("#chord1 option:selected").text()
+            // if sharp/flat chosen, just get the sharp
+            if(progression.chord1.name.includes('/')){
+                progression.chord1.name = progression.chord1.name.split('/')[1]
+            }
             progression.key = progression.chord1.name.split(' ')[0]
             progression.chord1.quality = progression.chord1.name.split(' ')[1]
             // major or minor
