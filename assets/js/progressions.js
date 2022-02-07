@@ -1,9 +1,48 @@
+/* LOGIN/CREDENTIALS
+*
+*/
 var credentials = {
     username: null,
     password: null
 }
-// // store oauth creds here
-// var sessionAuth;
+// if the user signs out, reset the login creds and relaunch the login dialog
+$( "#userAccountMenu" ).change(function(event) {
+    
+    var choice = $("#userAccountMenu option:selected").text()
+    if(choice === 'Sign Out'){
+        // clear credentials from localStorage
+        credentials.username = null
+        credentials.password = null
+        localStorage.removeItem('username')
+        localStorage.removeItem('password')
+        // clear useraccount menu
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for(i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+        removeOptions(document.getElementById('userAccountMenu'))
+
+        $( "#dialog" ).dialog({
+            show: { effect: "blind", duration: 500 }
+        });
+    }
+})
+// if no stored username data...
+if(localStorage.getItem('username') === null){
+    $( "#dialog" ).dialog({
+        show: { effect: "blind", duration: 500 }
+      });
+} else {
+    console.log('test')
+    $( "#dialog" ).hide()
+    // get credentials
+    credentials.username = localStorage.getItem('username')
+    credentials.password = localStorage.getItem('password')
+    // start ooAuth. false tells it not to hide dialog or store password (both are redundant)
+    oAuth(false)
+}
 
 // clear field upon click
 $( ".username" ).click(function(event) {
@@ -18,13 +57,12 @@ $( ".login" ).click(function(event) {
     credentials.username = $("#username").val()
     credentials.password = $("#password").val()
     systemMsg('Logging in...')
-    auth()
-    // localStorage.setItem(JSON.stringify(credentials))
+    oAuth(true)
 })
 
 // this function gets the bearer token given the user's login info
-function auth(){
-
+function oAuth(dialog){
+    // dialog is a boolean for whether the user entered their credentials, or the credentials were pulled from localStorage
     fetch('https://api.hooktheory.com/v1/users/auth', {
         method: 'POST',
         body: JSON.stringify(credentials),
@@ -48,19 +86,30 @@ function auth(){
         if(data.username === credentials.username){
             // it worked
             systemMsg('Signed In!')
+            $('<option/>').val(credentials.username).html(credentials.username).appendTo('#userAccountMenu');
+            $('<option/>').val('Sign Out').html('Sign Out').appendTo('#userAccountMenu');
             // store bearer token in localStorage (note that this will expire)
             localStorage.setItem("hookTheoryBearerToken", data.activkey)
-            // hide the login dialog
-            $( "#dialog" ).hide( "slow", function() {
-                $('#dialog').dialog('close')
-            });
+            // user signed in using the login dialog, so store credentials and then hide the login dialog
+            if(dialog === true){
+                // store username in localStorage
+                localStorage.setItem('username', credentials.username)
+                // store password in localStorage
+                localStorage.setItem('password', credentials.password)
+                // hide login dialog
+                $( "#dialog" ).hide( "slow", function() {
+                    $('#dialog').dialog('close')
+                });
+            }
+
         }
     }).catch(function (err) {
         // Log any errors
-        console.log('Error in auth fetch: ', err);
+        console.log('Error in oAuth fetch: ', err);
     })
 }
 
+// MUSIC THEORY STUFF
 // TODO find either an api or a json that contains note names per each scale
 var keys = {
     major: ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'],
