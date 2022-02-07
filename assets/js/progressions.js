@@ -190,9 +190,9 @@ function populateHistory(){
 
 saveSessionButton.addEventListener("click",function(event){
     
-    currentStorage = currentStorage.push(changes); // ask if there should be a limit
-    
-    localStorage.setItem('progressionStorage');
+    currentStorage.push(changes); // ask if there should be a limit
+
+    localStorage.setItem('progressionStorage', currentStorage);
 }
 
 );
@@ -202,5 +202,5 @@ historySelect.change(function(event){
     // returnPosition--;
     // document.getElementById('chord1').value = currentStorage[returnPosition].chord1.name;
     // document.getElementById('chord2').value = currentStorage[returnPosition].chord2.name;
-    //suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
+    // suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
 })
