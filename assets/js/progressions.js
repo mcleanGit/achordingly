@@ -101,7 +101,6 @@ function oAuth(dialog){
                     $('#dialog').dialog('close')
                 });
             }
-
         }
     }).catch(function (err) {
         // Log any errors
@@ -143,6 +142,9 @@ var progression = {
         name: null,
         degree: null, // the degree is relative to chord1's degree, and is in fact what hooktheory returns
         numeral: null // this is currently what is populated into the dropdown. 
+    },
+    mostCommonAfter2:{
+        chords: []
     }
 }
 
@@ -248,7 +250,10 @@ function suggestChord(chordNumber, name, probabilities){
             }
             systemMsg('Chord suggestions returned!')
         break
-        // add case 3 for if we want a third column for a chord... 
+        // list of suggested chords that would follow chord 2
+        case 3:
+
+        break;
     }
 }
 
@@ -266,40 +271,3 @@ function clearChord2(){
 function systemMsg(msg){
     $('.systemMsg').text(msg)
 }
-
-// Save progression
-var saveSessionButton = document.querySelector("#SaveSession");
-var currentStorage = []; // ask if to add savename to changes object so we don't have to inherit
-var historySelect = $('#HistoryID');
-
-if(!localStorage.getItem('progressionStorage')){
-    populateHistory(); //populate list with progression history
-}
-
-function populateHistory(){
-    currentStorage = localStorage.getItem(progressionStorage);
-
-    // Todo include list population for #HistoryID
-    for(i=0;i<currentStorage.length;i++){
-        //$('<option/>').text(changes.savename).appendTo(historySelect); // changes savedname if added
-    }
-
-}
-
-
-saveSessionButton.addEventListener("click",function(event){
-    
-    currentStorage.push(changes); // ask if there should be a limit
-
-    localStorage.setItem('progressionStorage', currentStorage);
-}
-
-);
-
-historySelect.change(function(event){
-    // var returnPosition = $('option:selected',this).index();
-    // returnPosition--;
-    // document.getElementById('chord1').value = currentStorage[returnPosition].chord1.name;
-    // document.getElementById('chord2').value = currentStorage[returnPosition].chord2.name;
-    // suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
-})
