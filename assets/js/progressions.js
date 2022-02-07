@@ -2,8 +2,8 @@ var credentials = {
     username: null,
     password: null
 }
-// store oauth creds here
-var sessionAuth;
+// // store oauth creds here
+// var sessionAuth;
 
 // clear field upon click
 $( ".username" ).click(function(event) {
@@ -22,6 +22,7 @@ $( ".login" ).click(function(event) {
     // localStorage.setItem(JSON.stringify(credentials))
 })
 
+// this function gets the bearer token given the user's login info
 function auth(){
 
     fetch('https://api.hooktheory.com/v1/users/auth', {
@@ -47,7 +48,8 @@ function auth(){
         if(data.username === credentials.username){
             // it worked
             systemMsg('Signed In!')
-            sessionAuth = data
+            // store bearer token in localStorage (note that this will expire)
+            localStorage.setItem("hookTheoryBearerToken", data.activkey)
             // hide the login dialog
             $( "#dialog" ).hide( "slow", function() {
                 $('#dialog').dialog('close')
@@ -76,35 +78,50 @@ Object.keys(keys).forEach(key => {
     }
 })
 // watch for key & other chord choices
-var changes = {
+//! for william: this will be what gets saved in the user's progression save
+var progression = {
     key: null,
+    keyInfo: null, // uses tonalJS to grab lots of info about the key
     scale: [],
     progression: [],
     chord1: {
-        name: null,
-        degree: 1, //hardcoded for now
-        quality: null
+        
+        name: null, // i.e. C, E, G (pulled from keys.major or keys.minor)
+        degree: 1, // hardcoded for now (1 means first note in the scale)
+        quality: null // major or minor
     },
     chord2:{
         name: null,
-        degree: null,
-        numeral: null
+        degree: null, // the degree is relative to chord1's degree, and is in fact what hooktheory returns
+        numeral: null // this is currently what is populated into the dropdown. 
     }
 }
+
+// given chord choices in the dropdown of either column 1 or column 2:
 $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
-            changes.chord1.name = $("#chord1 option:selected").text()
-            changes.key = changes.chord1.name.split(' ')[0]
-            changes.chord1.quality = changes.chord1.name.split(' ')[1]
+            progression.chord1.name = $("#chord1 option:selected").text()
+            progression.key = progression.chord1.name.split(' ')[0]
+            progression.chord1.quality = progression.chord1.name.split(' ')[1]
+            // major or minor
+            switch(progression.chord1.quality){
+                case 'major':
+                    progression.keyInfo = Tonal.Key.majorKey(progression.key)
+                break;
+                case 'minor':
+                    progression.keyInfo = Tonal.Key.minorKey(progression.key)
+                break;
+            }
+            
             // clear any suggested chord2 content
             clearChord2()
             // chord column number here is 2, scale degree, chord name
-            nextChord(2, changes.chord1.degree, changes.chord1.name)
+            nextChord(2, progression.chord1.degree, progression.chord1.name)
         break
         case 'chord2':
-            changes.chord2.numeral = $("#chord2 option:selected").text()
-            $('.chord2diagram').text('guitar diagram: ' + changes.chord2.numeral)
+            progression.chord2.numeral = $("#chord2 option:selected").text()
+            $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
         break
      
     }
@@ -113,8 +130,10 @@ $( ".chordSetup" ).change(function(event) {
 
 function nextChord(chordNumber, degree, name){
     systemMsg('Accessing chord database, please wait...')
+    var bearerToken = localStorage.getItem("hookTheoryBearerToken")
+    console.log(bearerToken)
     // var url = 'https://api.hooktheory.com/v1/trends/nodes?cp=' + childPath
-    var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${degree}&bearer=${sessionAuth.activkey}&nodes`
+    var url = `https://chriscastle.com/proxy/hooktheory.php?cp=${degree}&bearer=${bearerToken}&nodes`
     // request a probable chord given first chord degree
     fetch(url,{
         headers: {
@@ -128,7 +147,7 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        // console.log('final', data)
+        console.log(chordNumber, name, data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
@@ -143,9 +162,24 @@ function suggestChord(chordNumber, name, probabilities){
         case 2:
             // reset the selectmenu
             clearChord2()
+
             // create the selectmenu
             for(i=0;i<6;i++){
-                $('<option/>').val(probabilities[i].chord_HTML).html(probabilities[i].chord_HTML).appendTo('#chord2');
+                num = probabilities[i].chord_HTML
+                // remove html tags
+                num = num.replace(/<[^>]+>/g, '').toUpperCase();
+                // get number from numeral
+                chord = Tonal.RomanNumeral.get(num);
+                // if chord has a number in it
+                if(/\d/.test(num) === true){
+                  num = num.split(/[0-9]/)[0] // + quality + num.split(/[0-9]/)[1]
+                } 
+                // find the scale index of the number
+                index = key.grades.indexOf(num)
+                // get chord name given scale index and key chord array
+                chordName = progression.keyInfo.chords[index]
+                // add chord names to the chord2 dropdown menu
+                $('<option/>').val(chordName).html(chordName).appendTo('#chord2');
             }
             systemMsg('Chord suggestions returned!')
         break
@@ -160,7 +194,7 @@ function clearChord2(){
         for(i = L; i >= 0; i--) {
             selectElement.remove(i);
         }
-        }
+    }
     removeOptions(document.getElementById('chord2'))
 }
 

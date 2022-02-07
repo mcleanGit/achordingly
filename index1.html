@@ -1,10 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html class="no js" lang="en">
+    <!-- the "no js" is a Foundation requisite -->
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Chord Changing Practice Thigamajig</title>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+        <!-- Compressed Foundation  CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">
+        <!-- not clear if the next href is needed if we have previous -->
+        <!-- <link rel="stylesheet" href="css/foundation.css" -->
+        <!-- however, we do need our own css; the next should be our css assets file, perhaps .assets/css/app.css ? -->
+        <link rel="stylesheet" href="css/app.css">
+      
         <style>
             fieldset {
             border: 0;
@@ -17,12 +25,12 @@
             height: 200px;
             }
         </style>
-        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <!-- this is a js associated with Foundation css -- see also below -->
+        <script src="js/vendor/modernizr.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
         <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-
-
-
     </head>
+   
     <body>
 
         <div class="chordSetup">
@@ -35,8 +43,7 @@
             <select name="chord2" id="chord2">
                 <option disabled selected>Select second chord</option>
             </select>
-            <div id="chord2diagram" class="chord2diagram"></div>
-        
+            <div id="chord2diagram" class="chord2diagram"></div>     
         </div>
         
         <div id="dialog" class="signin" title="Hooktheory Login">
@@ -51,8 +58,8 @@
         </div>
         
         <script src="./assets/js/progressions.js"></script>
-        <!-- tonalJS for scales/chords lookup tables -->
-        <script src="https://cdn.jsdelivr.net/npm/@tonaljs/tonal/browser/tonal.min.js"></script>
+        <!-- Compressed Foundation JavaScript -- review need/conflict possibilities and positioning-->
+        <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js" crossorigin="anonymous"></script>
         <script>
             $( function() {
                 $( "#dialog" ).dialog();
