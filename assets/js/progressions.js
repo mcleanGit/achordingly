@@ -167,3 +167,40 @@ function clearChord2(){
 function systemMsg(msg){
     $('.systemMsg').text(msg)
 }
+
+// Save progression
+var saveSessionButton = document.querySelector("#SaveSession");
+var currentStorage = []; // ask if to add savename to changes object so we don't have to inherit
+var historySelect = $('#HistoryID');
+
+if(!localStorage.getItem('progressionStorage')){
+    populateHistory(); //populate list with progression history
+}
+
+function populateHistory(){
+    currentStorage = localStorage.getItem(progressionStorage);
+
+    // Todo include list population for #HistoryID
+    for(i=0;i<currentStorage.length;i++){
+        //$('<option/>').text(changes.savename).appendTo(historySelect); // changes savedname if added
+    }
+
+}
+
+
+saveSessionButton.addEventListener("click",function(event){
+    
+    currentStorage = currentStorage.push(changes); // ask if there should be a limit
+    
+    localStorage.setItem('progressionStorage');
+}
+
+);
+
+historySelect.change(function(event){
+    // var returnPosition = $('option:selected',this).index();
+    // returnPosition--;
+    // document.getElementById('chord1').value = currentStorage[returnPosition].chord1.name;
+    // document.getElementById('chord2').value = currentStorage[returnPosition].chord2.name;
+    //suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
+})
