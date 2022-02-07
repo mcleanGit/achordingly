@@ -18,3 +18,6 @@ As a beginner guitarist, what are the most common chord changes to know? This ap
 
 ## Link for the repo
 https://github.com/michaelpalumbo/apiapi
+
+## Trello board
+https://trello.com/b/7NjWUsJy/cinco-swim-project
