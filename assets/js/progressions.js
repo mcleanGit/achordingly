@@ -273,28 +273,17 @@ function suggestChord(chordNumber, name, probabilities){
                 
                 // add chord names to the chord2 dropdown menu
                 $('<option/>').val(num).html(chordName).appendTo('#chord2');
-
-                if(i=0){
-                    // first choice, so set it as the chosen
-
-                    progression.chord2.name = chordName
-                    progression.chord2.chordID = probabilities[i].chord_ID
-                    // now grab suggested chords for column 3 based on selected chord 2
-                    chord = Tonal.RomanNumeral.get(num);
-                    
-                    degree = chord.step + 1
-                    nextChord(3, degree, name)     
-                }
             }
             systemMsg('Chord suggestions returned!')
-       
+
+            
         break
         // list of suggested chords that would follow chord 2
         case 3:
             console.log(chordNumber, probabilities)
 
             // reset the list
-            $('#chordListColumn3').empty()
+            // clearChord2()
 
             // create the list
             for(i=0;i<6;i++){
