@@ -89,7 +89,6 @@ function oAuth(dialog){
         if(data.username === credentials.username){
             // it worked
             systemMsg('Signed In!')
-            console.log(data)
             $('<option/>').val(credentials.username).html(credentials.username).appendTo('#userAccountMenu');
             $('<option/>').val('Sign Out').html('Sign Out').appendTo('#userAccountMenu');
             // store bearer token in localStorage (note that this will expire)
@@ -162,7 +161,6 @@ function getChord(chordName){
 }
 // given chord choices in the dropdown of either column 1 or column 2:
 $( ".chordSetup" ).change(function(event) {
-    console.log('event', event.target.name)
     switch(event.target.name){
         case 'chord1':
             progression.chord1.name = $("#chord1 option:selected").text()
@@ -195,16 +193,13 @@ $( ".chordSetup" ).change(function(event) {
             // $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
 
             // now grab suggested chords for column 3 based on selected chord 2
-            console.log(progression.chord2.chordID)
             chord = Tonal.RomanNumeral.get(num);
-            console.log(chord)
             degree = chord.step + 1
             nextChord(3, degree, name)
         break
     }
 })
 $( "#chordListColumn3" ).on("click", function(event) {
-    console.log(event.target)
     degree = event.target.dataset.chordid
     // needs to reset the chord in column 1
 
@@ -213,7 +208,8 @@ $( "#chordListColumn3" ).on("click", function(event) {
     // make it selected
     $('#chord1').val(degree);
     // $("#chord1").selectmenu("refresh");
-    // 
+    
+
     nextChord(2, degree, event.target.dataset.chord)
 
 })
@@ -277,6 +273,27 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = progression.keyInfo.natural.chords[step]
                 }
                 
+                if(chordName.includes('maj7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('maj7', '')
+                } else if(chordName.includes('m7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('m7', 'm')
+                }
+                // here is where we need to fire chord selection2 so that list 3 populates. 
+                if(i===0){
+                    progression.chord2.name = chordName
+                    progression.chord2.chordID = probabilities[i].chord_ID
+                    // $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
+        
+                    // now grab suggested chords for column 3 based on selected chord 2
+                    chord = Tonal.RomanNumeral.get(num);
+                    console.log(progression.keyInfo)
+                    console.log(progression.chord1)
+
+                    degree = chord.step + 1
+                    nextChord(3, degree, name)
+                }
                 
                 // add chord names to the chord2 dropdown menu
                 $('<option/>').val(num).html(chordName).appendTo('#chord2');
@@ -287,7 +304,6 @@ function suggestChord(chordNumber, name, probabilities){
         break
         // list of suggested chords that would follow chord 2
         case 3:
-            console.log(chordNumber, probabilities)
 
             // reset the list
             $('.chordListColumn3').empty()
@@ -316,7 +332,13 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = progression.keyInfo.natural.chords[step]
                 }
                 
-                var chord_chordID = chordName + '_' + chordID
+                if(chordName.includes('maj7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('maj7', '')
+                } else if(chordName.includes('m7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('m7', 'm')
+                }
                 
                 // add chord names to the list
                 $('<li/>').val(chordID).html(`<a data-chord=${chordName} data-chordID=${chordID}>${chordName}</a>`).appendTo('#chordListColumn3');
