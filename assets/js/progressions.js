@@ -208,7 +208,8 @@ $( "#chordListColumn3" ).on("click", function(event) {
     // make it selected
     $('#chord1').val(degree);
     // $("#chord1").selectmenu("refresh");
-    // 
+    
+
     nextChord(2, degree, event.target.dataset.chord)
 
 })
