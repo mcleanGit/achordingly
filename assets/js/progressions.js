@@ -148,8 +148,12 @@ var progression = {
     }
 }
 
+function getChord(chordName){
+
+}
 // given chord choices in the dropdown of either column 1 or column 2:
 $( ".chordSetup" ).change(function(event) {
+    console.log('event', event.target.name)
     switch(event.target.name){
         case 'chord1':
             progression.chord1.name = $("#chord1 option:selected").text()
@@ -177,14 +181,27 @@ $( ".chordSetup" ).change(function(event) {
             nextChord(2, progression.chord1.degree, progression.chord1.name)
         break
         case 'chord2':
-            progression.chord2.numeral = $("#chord2 option:selected").text()
+            progression.chord2.name = $("#chord2 option:selected").text()
             $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
+
+            // now grab suggested chords for column 3 based on selected chord 2
+            console.log(progression.chord2.numeral)
+            chord = Tonal.RomanNumeral.get(num);
+            console.log(chord.step)
+            degree = chord.step + 1
+            nextChord(3, degree, name)
         break
-     
     }
-
 })
+$( ".chordSetup" ).click(function(event) {
 
+    switch(Object.keys(event.target.dataset)[0]){
+        case 'chord':
+            console.log(event.target.dataset.chord)
+        break
+        
+    }
+})
 function nextChord(chordNumber, degree, name){
     
     systemMsg('Accessing chord database, please wait...')
@@ -249,10 +266,43 @@ function suggestChord(chordNumber, name, probabilities){
                 $('<option/>').val(chordName).html(chordName).appendTo('#chord2');
             }
             systemMsg('Chord suggestions returned!')
+
+            
         break
         // list of suggested chords that would follow chord 2
         case 3:
+            console.log(chordNumber, probabilities)
 
+            // reset the list
+            // clearChord2()
+
+            // create the list
+            for(i=0;i<6;i++){
+                num = probabilities[i].chord_HTML
+                // remove html tags
+                num = num.replace(/<[^>]+>/g, '').toUpperCase();
+                // get number from numeral
+                chord = Tonal.RomanNumeral.get(num);
+                // if chord has a number in it
+                if(/\d/.test(num) === true){
+                    num = num.split(/[0-9]/)[0] // + quality + num.split(/[0-9]/)[1]
+                } 
+                // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
+                var index;
+                if(progression.keyInfo.type === 'major'){
+                    var step = chord.step
+                    // get chord name given scale index and key chord array
+                    chordName = progression.keyInfo.chords[step]
+                } else {
+                    var step = chord.step
+                    // get chord name given scale index and key chord array
+                    chordName = progression.keyInfo.natural.chords[step]
+                }
+                
+
+                // add chord names to the list
+                $('<li/>').attr('data-chord', chordName).val(chordName).html(`<a data-chord=${chordName}>${chordName}</a>`).appendTo('#chordListColumn3');
+            }
         break;
     }
 }
