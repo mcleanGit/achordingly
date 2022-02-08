@@ -1,25 +1,17 @@
 <!doctype html>
-<html class="no js" lang="en">
+<html class="no-js" lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Chord Changing Practice Thigamajig</title>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-        <!-- Compressed Foundation  CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">
+        
+        <!-- Foundation CSS BEGIN -->
+        <link rel="stylesheet" href="assets/css/foundation.css">
         <link rel="stylesheet" href="assets/css/app.css">
-        <style>
-            fieldset {
-            border: 0;
-            }
-            label {
-            display: block;
-            margin: 30px 0 0 0;
-            }
-            .overflow {
-            height: 200px;
-            }
-        </style>
+        <!-- Foundation CSS END -->
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
@@ -28,6 +20,43 @@
 
     </head>
     <body>
+        <!-- Navigation -->
+        <header>
+            <h1><a href="/">ThisCHORD</a></h1>
+
+            <div class="title-bar" data-responsive-toggle="responsive-menu" data-hide-for="medium">
+                <button class="menu-icon" type="button" data-toggle="responsive-menu"></button>
+                <div class="title-bar-title">Menu</div>
+              </div>
+              
+              <div class="top-bar" id="responsive-menu">
+                <div class="top-bar-right">
+                  <ul class="dropdown menu" data-dropdown-menu>
+                    <li class="menu-text">Chord Theory</li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li class="has-submenu">
+                        <a href="#account">Account</a>
+                        <ul class="submenu menu vertical" data-submenu>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                            <li><a href="#account">Account</a></li>
+                        </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-text">
+                <h2>You must have a Hook Theory account in order to use ThisCHORD</h2>
+                <p><button class="button" data-open="login-box">Login to Hook Theory</button></p>
+            </div>
+        </section>
+
         <!-- chords 1 & 2 -->
         <div class="chordSetup">
             <div class="systemMsg" id="systemMsg"></div>
@@ -47,6 +76,8 @@
             </ul>
         </div>
         <!-- login -->
+    <!-- Original Login container (will delete after testing new version)
+
         <div id="dialog" class="signin" title="Hooktheory Login">
             <p>Please sign in to your Hooktheory Account.</p>
             <input class="username" id="username" value="Enter Username"> 
@@ -56,6 +87,22 @@
             <p>Need an account? <a href="https://www.hooktheory.com/signup" target="_blank">Sign Up</a></p>
             <p><a href="https://www.hooktheory.com/user/password" target="_blank">Forgot Password?</a></p>
             <a href="https://www.hooktheory.com/user/username" target="_blank">Forgot Username?</a></p>
+        </div>
+
+    -->
+
+        <div class="signin reveal" id="login-box" title="Hook Theory Login" data-reveal>
+            <p>Please sign in to your Hook Theory Account.</p>
+            <input type="text" placeholder="Enter Username" class="username" id="username"> 
+            <p>
+            <input type="password" class="password" id="password"> 
+            <button class="login submit button" id="login">Login</button>
+            <p>Need an account? <a href="https://www.hooktheory.com/signup" target="_blank">Sign Up</a></p>
+            <p><a href="https://www.hooktheory.com/user/password" target="_blank">Forgot Password?</a></p>
+            <a href="https://www.hooktheory.com/user/username" target="_blank">Forgot Username?</a></p>
+            <button class="close-button" data-close aria-label="Close Modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         
     <!-- Saved Progressions -->
@@ -78,11 +125,31 @@
                 
             </select>
         </div>
+
+        <!-- Footer -->
+        <footer>
+            <div>
+                <img src="assets/images/cincoswim.png" />
+                &copy; 2022 Cinco Swim Solutions
+            </div>
+        </footer>    
+
         <script src="./assets/js/progressions.js"></script>
-         <!-- Compressed Foundation JavaScript -- review potential conflicts -->
-         <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js" crossorigin="anonymous"></script>
+
 
         <!-- tonalJS for scales/chords lookup tables -->
         <script src="https://cdn.jsdelivr.net/npm/@tonaljs/tonal/browser/tonal.min.js"></script>
+
+
+
+        <!-- Foundation JS BEGIN-->
+        <script src="assets/js/vendor/jquery.js"></script>
+        <script src="assets/js/vendor/what-input.js"></script>
+        <script src="assets/js/vendor/foundation.min.js"></script>
+        <script>
+        $(document).foundation();
+        </script>
+        <!-- Foundation JS END-->
     </body>
 </html>
+
