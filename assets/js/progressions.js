@@ -135,6 +135,7 @@ Object.keys(keys).forEach(key => {
 // watch for key & other chord choices
 //! for william: this will be what gets saved in the user's progression save
 var progression = {
+    userSavedName: "",
     key: null,
     keyInfo: null, // uses tonalJS to grab lots of info about the key
     scale: [],
@@ -363,3 +364,42 @@ function clearChord2(){
 function systemMsg(msg){
     $('.systemMsg').text(msg)
 }
+
+// Save progression
+var saveSessionButton = $("#SaveSession");
+var currentStorage = [null]; // ask if to add savename to changes object so we don't have to inherit
+var historySelect = $('#HistoryID');
+
+if(localStorage.getItem('progressionStorage')){
+    populateHistory(); //populate list with progression history
+}
+
+function populateHistory(){
+    currentStorage = JSON.parse(localStorage.getItem('progressionStorage'));
+
+    // Todo include list population for #HistoryID
+    for(i=0;i<currentStorage.length;i++){
+        //$('<option/>').text(progression.savename).appendTo(historySelect); // changes savedname if added
+    }
+
+}
+
+
+saveSessionButton.click(function(event){
+    progression.userSavedName = $('#savedName').val();
+    console.log('current storage', currentStorage);
+
+    currentStorage.push(JSON.parse(JSON.stringify(progression))); // ask if there should be a limit
+    //console.log(JSON.stringify(currentStorage));
+    localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
+});
+
+historySelect.change(function(event){
+    //var returnPosition = $('option:selected',this).index();
+    // returnPosition--;
+    // document.getElementById('chord1').value = currentStorage[returnPosition].chord1.name;
+    // document.getElementById('chord2').value = currentStorage[returnPosition].chord2.name;
+    // suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
+
+    //console.log(returnPosition);
+})
