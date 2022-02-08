@@ -15,3 +15,15 @@ fieldset {
     footer img {
        height: 50px; 
     }
+
+
+/* Header */
+    header h1 {
+        text-align: center;
+    }
+
+
+    /* Footer */
+    footer div {
+        text-align:center;
+    }

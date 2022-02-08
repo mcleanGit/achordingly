@@ -32,15 +32,14 @@
               <div class="top-bar" id="responsive-menu">
                 <div class="top-bar-right">
                   <ul class="dropdown menu" data-dropdown-menu>
-                    <li class="menu-text">Chord Theory</li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li data-open="about"><a href="#about">About</a></li>
+                    <li data-open="contact"><a href="#contact">Contact</a></li>
+                    <li><button class="button" data-open="login-box">Login</button></li>
                     <li class="has-submenu">
-                        <a href="#account">Account</a>
+                        <a href="#account">My Account</a>
                         <ul class="submenu menu vertical" data-submenu>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#contact">Contact</a></li>
-                            <li><a href="#account">Account</a></li>
+                            <li><a href="https://www.hooktheory.com/account" target="_blank">Manage</a></li>
+                            <li><a href="#">Logout</a></li>
                         </ul>
                     </li>
                   </ul>
@@ -53,27 +52,63 @@
         <section class="hero">
             <div class="hero-text">
                 <h2>You must have a Hook Theory account in order to use ThisCHORD</h2>
-                <p><button class="button" data-open="login-box">Login to Hook Theory</button></p>
             </div>
         </section>
 
         <!-- chords 1 & 2 -->
         <div class="chordSetup">
             <div class="systemMsg" id="systemMsg"></div>
-            <label for="chord1">Choose your first</label>
-            <select name="chord1" id="chord1">
-                <option disabled selected>Select starting chord</option>
-            </select>
-            <label for="chord2">Suggested Chord</label>
-            <select name="chord2" id="chord2">
-                <option disabled selected>Select second chord</option>
-            </select>
-            <div id="chord2diagram" class="chord2diagram"></div>
-            <label for="chordListcolumn3">Suggested Chord</label>
-            <h4>Most-Common Chords after [Chord2]</h4>
-            <ul name="chordListColumn3" id="chordListColumn3">
-                
-            </ul>
+            <div class="grid-x grid-margin-x grid-padding-x">
+                <div class="large-4 cell">
+                    <label for="chord1">Choose your first</label>
+                    <select name="chord1" id="chord1">
+                        <option disabled selected>Select starting chord</option>
+                    </select>
+                </div>
+                <div class="large-4 cell">
+                    <label for="chord2">Suggested Chord</label>
+                    <select name="chord2" id="chord2">
+                        <option disabled selected>Select second chord</option>
+                    </select>
+                    <div id="chord2diagram" class="chord2diagram"></div>
+                    <label for="chordListcolumn3">Suggested Chord</label>
+                </div>
+                <div class="large-4 cell">
+                    <h4>Most-Common Chords after [Chord2]</h4>
+                    <ul name="chordListColumn3" id="chordListColumn3">
+                    </ul>
+
+
+
+
+                    <!-- user account menu -->
+                    <div class="userAccount" id="userAccount"></div>
+                        <label for="userAccountMenu">Account</label>
+                        <select name="userAccountMenu" id="userAccountMenu">
+                        <!-- place username here -->
+                            
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Save Progression Window -->
+            <p><button class="button" data-open="saveYourProgress">Save Your Progress</button></p>
+
+            <!-- Saved Progressions -->
+            <div class="medium reveal" id="saveYourProgress" data-reveal>
+                <h2>Save Your Progress</h2>
+                <input type="text" id="savedName" name="savedName">
+                        <button id="SaveSession">Save Session</button>
+
+                        <select name="SavedProgressions" id="HistoryID">
+                            <option disabled selected>--Saved Progressions--</option>
+                        </select>
+                <button class="close-button" data-close aria-label="Close Modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
         </div>
         <!-- login -->
     <!-- Original Login container (will delete after testing new version)
@@ -104,27 +139,53 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        
-    <!-- Saved Progressions -->
-    <div id="saveYourProgress">
-        <h2>Save Your Progress</h2>
 
-        <input type="text" id="savedName" name="savedName">
-        <button id="SaveSession">Save Session</button>
+    
+    <!-- About Section/Modal -->
+        <div class="large reveal" id="about" title="About ThisCHORD" data-reveal>
+            <h2>About ThisCHORD</h2>
+            <p>ThisChord is the brainchild of Cinco Swim Solutions</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, natus. Cupiditate modi numquam quasi error incidunt praesentium, ipsam unde quas voluptatibus inventore eveniet perferendis repellat quidem molestiae totam. Ratione, dolorum.</p>
+            <button class="close-button" data-close aria-label="Close Modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-        <select name="SavedProgressions" id="HistoryID">
-            <option disabled selected>--Saved Progressions--</option>
-        </select>
+    <!-- Contact Us Section/Modal -->
+    <div class="large reveal" id="contact" title="Contact Us" data-reveal>
+        <h2>Contact Us</h2>
+        <p>If you would like to contact us please fill the form below</p>
+        <form onsubmit="ContactFunction()">
+            <div class="grid-container">
+              <div class="grid-x grid-padding-x">
+                <div class="medium-6 cell">
+                  <label>Name
+                    <input type="text" placeholder="Your full name">
+                  </label>
+                </div>
+                <div class="medium-6 cell">
+                  <label>Email Address
+                    <input type="email" placeholder="Email Address">
+                  </label>
+                </div>
+                <div class="large-12 cell">
+                    <label>
+                        Question / Comment
+                        <textarea placeholder="Type your question or comment here"></textarea>
+                    </label>
+                </div>
+                <div>
+                    <input type="submit" class="button" value="submit">
+                </div>
+             </div>
+            </div>
+          </form>
+        <button class="close-button" data-close aria-label="Close Modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 
-        <!-- user account menu -->
-        <div class="userAccount" id="userAccount"></div>
-            <label for="userAccountMenu">Account</label>
-            <select name="userAccountMenu" id="userAccountMenu">
-            <!-- place username here -->
-                
-            </select>
-        </div>
+            
 
         <!-- Footer -->
         <footer>
