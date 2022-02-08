@@ -5,8 +5,7 @@ var credentials = {
     username: null,
     password: null
 }
-// use to open/close the login modal programmatically
-var loginModal = new Foundation.Reveal($('#login-box'));
+
 
 // if the user signs out, reset the login creds and relaunch the login dialog
 $( "#userAccountMenu" ).change(function(event) {
