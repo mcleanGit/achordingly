@@ -290,7 +290,7 @@ function suggestChord(chordNumber, name, probabilities){
             console.log(chordNumber, probabilities)
 
             // reset the list
-            // clearChord2()
+            $('.chordListColumn3').empty()
 
             // create the list
             for(i=0;i<6;i++){
@@ -335,6 +335,8 @@ function clearChord2(){
     }
     removeOptions(document.getElementById('chord2'))
 }
+
+
 
 function systemMsg(msg){
     $('.systemMsg').text(msg)
