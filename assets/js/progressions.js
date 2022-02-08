@@ -5,6 +5,9 @@ var credentials = {
     username: null,
     password: null
 }
+// use to open/close the login modal programmatically
+var loginModal = new Foundation.Reveal($('#login-box'));
+
 // if the user signs out, reset the login creds and relaunch the login dialog
 $( "#userAccountMenu" ).change(function(event) {
     
@@ -24,6 +27,7 @@ $( "#userAccountMenu" ).change(function(event) {
         }
         removeOptions(document.getElementById('userAccountMenu'))
 
+        
         $( "#dialog" ).dialog({
             show: { effect: "blind", duration: 500 }
         });
@@ -36,7 +40,7 @@ if(localStorage.getItem('username') === null){
       });
 } else {
     
-    $( "#dialog" ).hide()
+    $( "#login-box" ).hide()
     // get credentials
     credentials.username = localStorage.getItem('username')
     credentials.password = localStorage.getItem('password')
@@ -97,10 +101,14 @@ function oAuth(dialog){
                 localStorage.setItem('username', credentials.username)
                 // store password in localStorage
                 localStorage.setItem('password', credentials.password)
-                // hide login dialog
-                $( "#dialog" ).hide( "slow", function() {
-                    $('#dialog').dialog('close')
-                });
+                // hide login modal
+                // $( "#login-box" ).hide()
+                // $('.signin').modal('hide');
+                // var div = $(this).closest('div.reveal-modal').first();
+                loginModal.close()
+                // $( "#dialog" ).hide( "slow", function() {
+                //     $('#dialog').dialog('close')
+                // });
             }
         }
     }).catch(function (err) {
