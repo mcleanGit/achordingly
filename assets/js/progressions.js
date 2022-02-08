@@ -273,6 +273,13 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = progression.keyInfo.natural.chords[step]
                 }
                 
+                if(chordName.includes('maj7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('maj7', '')
+                } else if(chordName.includes('m7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('m7', 'm')
+                }
                 // here is where we need to fire chord selection2 so that list 3 populates. 
                 if(i===0){
                     progression.chord2.name = chordName
@@ -281,7 +288,9 @@ function suggestChord(chordNumber, name, probabilities){
         
                     // now grab suggested chords for column 3 based on selected chord 2
                     chord = Tonal.RomanNumeral.get(num);
-                   
+                    console.log(progression.keyInfo)
+                    console.log(progression.chord1)
+
                     degree = chord.step + 1
                     nextChord(3, degree, name)
                 }
@@ -323,7 +332,13 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = progression.keyInfo.natural.chords[step]
                 }
                 
-                var chord_chordID = chordName + '_' + chordID
+                if(chordName.includes('maj7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('maj7', '')
+                } else if(chordName.includes('m7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('m7', 'm')
+                }
                 
                 // add chord names to the list
                 $('<li/>').val(chordID).html(`<a data-chord=${chordName} data-chordID=${chordID}>${chordName}</a>`).appendTo('#chordListColumn3');
