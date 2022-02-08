@@ -86,6 +86,7 @@ function oAuth(dialog){
         if(data.username === credentials.username){
             // it worked
             systemMsg('Signed In!')
+            console.log(data)
             $('<option/>').val(credentials.username).html(credentials.username).appendTo('#userAccountMenu');
             $('<option/>').val('Sign Out').html('Sign Out').appendTo('#userAccountMenu');
             // store bearer token in localStorage (note that this will expire)
