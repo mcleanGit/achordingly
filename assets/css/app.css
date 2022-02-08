@@ -27,3 +27,9 @@ fieldset {
     footer div {
         text-align:center;
     }
+
+
+    /* Modal Close Button */
+    .modal-close-button {
+        text-align: center;
+    }

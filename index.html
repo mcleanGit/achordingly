@@ -33,6 +33,7 @@
                 <div class="top-bar-right">
                   <ul class="dropdown menu" data-dropdown-menu>
                     <li data-open="about"><a href="#about">About</a></li>
+                    <li data-open="howitworks"><a href="#howitworks">How It Works</a></li>
                     <li data-open="contact"><a href="#contact">Contact</a></li>
                     <li><button class="button" data-open="login-box">Login</button></li>
                     <li class="has-submenu">
@@ -59,12 +60,14 @@
         <div class="chordSetup">
             <div class="systemMsg" id="systemMsg"></div>
             <div class="grid-x grid-margin-x grid-padding-x">
+                <!-- Choose First Chord -->
                 <div class="large-4 cell">
                     <label for="chord1">Choose your first</label>
                     <select name="chord1" id="chord1">
                         <option disabled selected>Select starting chord</option>
                     </select>
                 </div>
+                <!-- Suggested Next Chord -->
                 <div class="large-4 cell">
                     <label for="chord2">Suggested Chord</label>
                     <select name="chord2" id="chord2">
@@ -73,6 +76,7 @@
                     <div id="chord2diagram" class="chord2diagram"></div>
                     <label for="chordListcolumn3">Suggested Chord</label>
                 </div>
+                <!-- Most Common Chords Next -->
                 <div class="large-4 cell">
                     <h4>Most-Common Chords after [Chord2]</h4>
                     <ul name="chordListColumn3" id="chordListColumn3">
@@ -125,7 +129,7 @@
         </div>
 
     -->
-
+        <!-- login -->
         <div class="signin reveal" id="login-box" title="Hook Theory Login" data-reveal>
             <p>Please sign in to your Hook Theory Account.</p>
             <input type="text" placeholder="Enter Username" class="username" id="username"> 
@@ -145,7 +149,20 @@
         <div class="large reveal" id="about" title="About ThisCHORD" data-reveal>
             <h2>About ThisCHORD</h2>
             <p>ThisChord is the brainchild of Cinco Swim Solutions</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, natus. Cupiditate modi numquam quasi error incidunt praesentium, ipsam unde quas voluptatibus inventore eveniet perferendis repellat quidem molestiae totam. Ratione, dolorum.</p>
+            <p>As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords.</p>
+            <p class="modal-close-button"><button class="button" data-close>Close</button></p>
+            <button class="close-button" data-close aria-label="Close Modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+
+        <!-- How It Works Section/Modal -->
+        <div class="large reveal" id="howitworks" title="How It Works" data-reveal>
+            <h2>How It Works</h2>
+            <p>ThisChord is the brainchild of Cinco Swim Solutions</p>
+            <p>stipulation in the login that users need to change their hooktheory password manually if they joined via google auth.</p>
+            <p class="modal-close-button"><button class="button" data-close>Close</button></p>
             <button class="close-button" data-close aria-label="Close Modal" type="button">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -180,7 +197,8 @@
              </div>
             </div>
           </form>
-        <button class="close-button" data-close aria-label="Close Modal" type="button">
+          <p class="modal-close-button"><button class="button" data-close>Close</button></p>
+          <button class="close-button" data-close aria-label="Close Modal" type="button">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
