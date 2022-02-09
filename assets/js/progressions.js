@@ -1,19 +1,4 @@
-function ContactFunction(){
-    var templateParams = {
-        from_username: credentials.username, 
-        from_name: $('.contactName').val(),
-        // to_name: 'Cinco Swim',
-        from_email: $('.contactEmail').val(),
-        message: $('.contactMessage').val() // replace null with question/comment
-    };
-     
-    emailjs.send('service_eqwugke', 'template_f09vmub', templateParams)
-        .then(function(response) {
-           console.log('SUCCESS!', response.status, response.text);
-        }, function(error) {
-           console.log('FAILED...', error);
-        });
-}
+
 
 /* LOGIN/CREDENTIALS
 *
@@ -472,3 +457,22 @@ historySelect.change(function(event){
 
     //console.log(returnPosition);
 })
+
+
+// use this to send emails from within our app :)
+function ContactFunction(){
+    var templateParams = {
+        from_username: credentials.username, 
+        from_name: $('.contactName').val(),
+        // to_name: 'Cinco Swim',
+        from_email: $('.contactEmail').val(),
+        message: $('.contactMessage').val() // replace null with question/comment
+    };
+     
+    emailjs.send('service_eqwugke', 'template_f09vmub', templateParams)
+        .then(function(response) {
+           console.log('SUCCESS!', response.status, response.text);
+        }, function(error) {
+           console.log('FAILED...', error);
+        });
+}
