@@ -1,0 +1,35 @@
+/* Moved over from index.html */
+fieldset {
+    border: 0;
+    }
+    label {
+    display: block;
+    margin: 30px 0 0 0;
+    }
+    .overflow {
+    height: 200px;
+    }
+
+
+/* Logo Style in Footer */
+    footer img {
+       height: 50px; 
+    }
+
+
+/* Header */
+    header h1 {
+        text-align: center;
+    }
+
+
+    /* Footer */
+    footer div {
+        text-align:center;
+    }
+
+
+    /* Modal Close Button */
+    .modal-close-button {
+        text-align: center;
+    }

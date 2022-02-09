@@ -5,6 +5,8 @@ var credentials = {
     username: null,
     password: null
 }
+
+
 // if the user signs out, reset the login creds and relaunch the login dialog
 $( "#userAccountMenu" ).change(function(event) {
     
@@ -24,6 +26,7 @@ $( "#userAccountMenu" ).change(function(event) {
         }
         removeOptions(document.getElementById('userAccountMenu'))
 
+        
         $( "#dialog" ).dialog({
             show: { effect: "blind", duration: 500 }
         });
@@ -36,7 +39,7 @@ if(localStorage.getItem('username') === null){
       });
 } else {
     
-    $( "#dialog" ).hide()
+    $( "#login-box" ).hide()
     // get credentials
     credentials.username = localStorage.getItem('username')
     credentials.password = localStorage.getItem('password')
@@ -96,12 +99,15 @@ function oAuth(dialog){
                 localStorage.setItem('username', credentials.username)
                 // store password in localStorage
                 localStorage.setItem('password', credentials.password)
-                // hide login dialog
-                $( "#dialog" ).hide( "slow", function() {
-                    $('#dialog').dialog('close')
-                });
+                // hide login modal
+                // $( "#login-box" ).hide()
+                // $('.signin').modal('hide');
+                // var div = $(this).closest('div.reveal-modal').first();
+                loginModal.close()
+                // $( "#dialog" ).hide( "slow", function() {
+                //     $('#dialog').dialog('close')
+                // });
             }
-
         }
     }).catch(function (err) {
         // Log any errors
@@ -129,6 +135,7 @@ Object.keys(keys).forEach(key => {
 // watch for key & other chord choices
 //! for william: this will be what gets saved in the user's progression save
 var progression = {
+    userSavedName: "",
     key: null,
     keyInfo: null, // uses tonalJS to grab lots of info about the key
     scale: [],
@@ -137,15 +144,22 @@ var progression = {
         
         name: null, // i.e. C, E, G (pulled from keys.major or keys.minor)
         degree: 1, // hardcoded for now (1 means first note in the scale)
-        quality: null // major or minor
+        quality: null, // major or minor
+        chordID: null // communication with hooktheoryAPI
     },
     chord2:{
         name: null,
         degree: null, // the degree is relative to chord1's degree, and is in fact what hooktheory returns
-        numeral: null // this is currently what is populated into the dropdown. 
+        chordID: null // this is how we communicate chords with hooktheory api
+    },
+    mostCommonAfter2:{
+        chords: []
     }
 }
 
+function getChord(chordName){
+
+}
 // given chord choices in the dropdown of either column 1 or column 2:
 $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
@@ -175,14 +189,31 @@ $( ".chordSetup" ).change(function(event) {
             nextChord(2, progression.chord1.degree, progression.chord1.name)
         break
         case 'chord2':
-            progression.chord2.numeral = $("#chord2 option:selected").text()
-            $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
+            progression.chord2.name = $("#chord2 option:selected").text()
+            progression.chord2.chordID = $("#chord2 option:selected").val()
+            // $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
+
+            // now grab suggested chords for column 3 based on selected chord 2
+            chord = Tonal.RomanNumeral.get(num);
+            degree = chord.step + 1
+            nextChord(3, degree, name)
         break
-     
     }
+})
+$( "#chordListColumn3" ).on("click", function(event) {
+    degree = event.target.dataset.chordid
+    // needs to reset the chord in column 1
+
+    // add chord to menu, make it selected
+    $('<option/>').val(degree).html(event.target.dataset.chord).appendTo('#chord1');
+    // make it selected
+    $('#chord1').val(degree);
+    // $("#chord1").selectmenu("refresh");
+    
+
+    nextChord(2, degree, event.target.dataset.chord)
 
 })
-
 function nextChord(chordNumber, degree, name){
     
     systemMsg('Accessing chord database, please wait...')
@@ -224,11 +255,71 @@ function suggestChord(chordNumber, name, probabilities){
                 num = probabilities[i].chord_HTML
                 // remove html tags
                 num = num.replace(/<[^>]+>/g, '').toUpperCase();
+                // if chord has a number in it
+                if(/\d/.test(num) === true){
+                    num = num.split(/[0-9]/)[0] // + quality + num.split(/[0-9]/)[1]
+                    } 
+                // get number from numeral
+                chord = Tonal.RomanNumeral.get(num);
+
+                // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
+                var index;
+                if(progression.keyInfo.type === 'major'){
+                    var step = chord.step
+                    // get chord name given scale index and key chord array
+                    chordName = progression.keyInfo.chords[step]
+                } else {
+                    var step = chord.step
+                    // get chord name given scale index and key chord array
+                    chordName = progression.keyInfo.natural.chords[step]
+                }
+                
+                if(chordName.includes('maj7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('maj7', '')
+                } else if(chordName.includes('m7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('m7', 'm')
+                }
+                // here is where we need to fire chord selection2 so that list 3 populates. 
+                if(i===0){
+                    progression.chord2.name = chordName
+                    progression.chord2.chordID = probabilities[i].chord_ID
+                    // $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
+        
+                    // now grab suggested chords for column 3 based on selected chord 2
+                    chord = Tonal.RomanNumeral.get(num);
+                    console.log(progression.keyInfo)
+                    console.log(progression.chord1)
+
+                    degree = chord.step + 1
+                    nextChord(3, degree, name)
+                }
+                
+                // add chord names to the chord2 dropdown menu
+                $('<option/>').val(num).html(chordName).appendTo('#chord2');
+            }
+            systemMsg('Chord suggestions returned!')
+
+            
+        break
+        // list of suggested chords that would follow chord 2
+        case 3:
+
+            // reset the list
+            $('.chordListColumn3').empty()
+
+            // create the list
+            for(i=0;i<6;i++){
+                num = probabilities[i].chord_HTML
+                chordID = probabilities[i].chord_ID
+                // remove html tags
+                num = num.replace(/<[^>]+>/g, '').toUpperCase();
                 // get number from numeral
                 chord = Tonal.RomanNumeral.get(num);
                 // if chord has a number in it
                 if(/\d/.test(num) === true){
-                  num = num.split(/[0-9]/)[0] // + quality + num.split(/[0-9]/)[1]
+                    num = num.split(/[0-9]/)[0] // + quality + num.split(/[0-9]/)[1]
                 } 
                 // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
                 var index;
@@ -242,13 +333,18 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = progression.keyInfo.natural.chords[step]
                 }
                 
-
-                // add chord names to the chord2 dropdown menu
-                $('<option/>').val(chordName).html(chordName).appendTo('#chord2');
+                if(chordName.includes('maj7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('maj7', '')
+                } else if(chordName.includes('m7')){
+                    // remove maj7, its confusing to guitarists and redundant
+                    chordName = chordName.replace('m7', 'm')
+                }
+                
+                // add chord names to the list
+                $('<li/>').val(chordID).html(`<a data-chord=${chordName} data-chordID=${chordID}>${chordName}</a>`).appendTo('#chordListColumn3');
             }
-            systemMsg('Chord suggestions returned!')
-        break
-        // add case 3 for if we want a third column for a chord... 
+        break;
     }
 }
 
@@ -263,6 +359,47 @@ function clearChord2(){
     removeOptions(document.getElementById('chord2'))
 }
 
+
+
 function systemMsg(msg){
     $('.systemMsg').text(msg)
 }
+
+// Save progression
+var saveSessionButton = $("#SaveSession");
+var currentStorage = [null]; // ask if to add savename to changes object so we don't have to inherit
+var historySelect = $('#HistoryID');
+
+if(localStorage.getItem('progressionStorage')){
+    populateHistory(); //populate list with progression history
+}
+
+function populateHistory(){
+    currentStorage = JSON.parse(localStorage.getItem('progressionStorage'));
+
+    // Todo include list population for #HistoryID
+    for(i=0;i<currentStorage.length;i++){
+        //$('<option/>').text(progression.savename).appendTo(historySelect); // changes savedname if added
+    }
+
+}
+
+
+saveSessionButton.click(function(event){
+    progression.userSavedName = $('#savedName').val();
+    console.log('current storage', currentStorage);
+
+    currentStorage.push(JSON.parse(JSON.stringify(progression))); // ask if there should be a limit
+    //console.log(JSON.stringify(currentStorage));
+    localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
+});
+
+historySelect.change(function(event){
+    //var returnPosition = $('option:selected',this).index();
+    // returnPosition--;
+    // document.getElementById('chord1').value = currentStorage[returnPosition].chord1.name;
+    // document.getElementById('chord2').value = currentStorage[returnPosition].chord2.name;
+    // suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
+
+    //console.log(returnPosition);
+})
