@@ -179,6 +179,8 @@ $( ".chordSetup" ).change(function(event) {
 
                 break;
             }
+            // add the div diagrams in the DOM
+
             diagram(".chord1fretboard", progression.chord1.name)
             diagram(".chord1piano", progression.chord1.name)
             diagram(".chord1fretboardSound", progression.chord1.name)
