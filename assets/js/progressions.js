@@ -180,6 +180,7 @@ $( ".chordSetup" ).change(function(event) {
                 break;
             }
             diagram(".chord1fretboard", progression.chord1.name)
+            diagram(".chord1piano", progression.chord2.name)
             // clear any suggested chord2 content
             clearChord2()
             // chord column number here is 2, scale degree, chord name
@@ -193,6 +194,7 @@ $( ".chordSetup" ).change(function(event) {
             // now grab suggested chords for column 3 based on selected chord 2
             chord = Tonal.RomanNumeral.get(num);
             degree = chord.step + 1
+            
             nextChord(3, degree, name)
         break
     }
@@ -291,6 +293,8 @@ function suggestChord(chordNumber, name, probabilities){
                     console.log(progression.chord1)
 
                     degree = chord.step + 1
+                    diagram(".chord2fretboard", progression.chord2.name)
+                    diagram(".chord2piano", progression.chord2.name)
                     nextChord(3, degree, name)
                 }
                 
