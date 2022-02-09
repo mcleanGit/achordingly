@@ -16,34 +16,25 @@ $("#userAct li").on("click", function(){
     switch (choice){
         case "Logout":
 
-                // clear credentials from localStorage
-                credentials.username = null
-                credentials.password = null
-                localStorage.removeItem('username')
-                localStorage.removeItem('password')
-                // clear useraccount menu
-                // function removeOptions(selectElement) {
-                //     var i, L = selectElement.options.length - 1;
-                //     for(i = L; i >= 0; i--) {
-                //         selectElement.remove(i);
-                //     }
-                // }
-                // removeOptions(document.getElementById('userAccountMenu'))
+            // clear credentials from localStorage
+            credentials.username = null
+            credentials.password = null
+            localStorage.removeItem('username')
+            localStorage.removeItem('password')
 
-                // TODO remove Login menu from DOM, or at least hide it. 
+            // TODO remove Login menu from DOM, or at least hide it. 
 
-                // TODO reload page
-                location.reload();
-                return false;
+            // refresh the page
+            location.reload();
+            return false;
 
-                // $( "#dialog" ).dialog({
-                //     show: { effect: "blind", duration: 500 }
-                // });
+            // $( "#dialog" ).dialog({
+            //     show: { effect: "blind", duration: 500 }
+            // });
 
         break
     }
-  
-  });
+});
 
 // if the user signs out, reset the login creds and relaunch the login dialog
 $( "#userAccountMenu" ).change(function(event) {
