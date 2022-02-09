@@ -197,6 +197,12 @@ $( ".chordSetup" ).change(function(event) {
             chord = Tonal.RomanNumeral.get(num);
             degree = chord.step + 1
             
+            // update diagrams
+            diagram(".chord2fretboard", progression.chord2.name)
+            diagram(".chord2piano", progression.chord2.name)
+            diagram(".chord2fretboardSound", progression.chord2.name)
+            diagram(".chord2pianoSound", progression.chord2.name)
+            
             nextChord(3, degree, name)
         break
     }
