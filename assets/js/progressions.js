@@ -180,7 +180,9 @@ $( ".chordSetup" ).change(function(event) {
                 break;
             }
             diagram(".chord1fretboard", progression.chord1.name)
-            diagram(".chord1piano", progression.chord2.name)
+            diagram(".chord1piano", progression.chord1.name)
+            diagram(".chord1fretboardSound", progression.chord1.name)
+            diagram(".chord1pianoSound", progression.chord1.name)
             // clear any suggested chord2 content
             clearChord2()
             // chord column number here is 2, scale degree, chord name
@@ -295,6 +297,8 @@ function suggestChord(chordNumber, name, probabilities){
                     degree = chord.step + 1
                     diagram(".chord2fretboard", progression.chord2.name)
                     diagram(".chord2piano", progression.chord2.name)
+                    diagram(".chord2fretboardSound", progression.chord2.name)
+                    diagram(".chord2pianoSound", progression.chord2.name)
                     nextChord(3, degree, name)
                 }
                 
