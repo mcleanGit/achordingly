@@ -270,7 +270,7 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        
+        console.log(data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
@@ -286,8 +286,11 @@ function suggestChord(chordNumber, name, probabilities){
             // reset the selectmenu
             clearChord2()
 
+            // hack to prevent duplicate chords in menu
+            var theseChords = []
             // create the selectmenu
-            for(i=0;i<6;i++){
+            var j = 6 // need this to be variable in case there are duplicate chords. 
+            for(i=0;i<j;i++){
                 num = probabilities[i].chord_HTML
                 // remove html tags
                 num = num.replace(/<[^>]+>/g, '').toUpperCase();
@@ -297,6 +300,7 @@ function suggestChord(chordNumber, name, probabilities){
                     } 
                 // get number from numeral
                 chord = Tonal.RomanNumeral.get(num);
+                
 
                 // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
                 var index;
@@ -317,6 +321,8 @@ function suggestChord(chordNumber, name, probabilities){
                     // remove maj7, its confusing to guitarists and redundant
                     chordName = chordName.replace('m7', 'm')
                 }
+
+                
                 // here is where we need to fire chord selection2 so that list 3 populates. 
                 if(i===0){
                     progression.chord2.name = chordName
@@ -342,9 +348,17 @@ function suggestChord(chordNumber, name, probabilities){
                     diagram(".chord2pianoSound", progression.chord2.name)
                     nextChord(3, degree, name)
                 }
-                
-                // add chord names to the chord2 dropdown menu
-                $('<option/>').val(num).html(chordName).appendTo('#chord2');
+                // prevent chord being added twice (this is a quick fix)
+                if(theseChords.includes(chordName)){
+                    console.log('filtered', chordName)
+                    // add another index to search through the array of returned chords
+                    j++
+                } else {
+                    // add chord names to the chord2 dropdown menu
+                    $('<option/>').val(num).html(chordName).appendTo('#chord2');
+                    theseChords.push(chordName)
+                }
+
             }
             systemMsg('Chord suggestions returned!')
 
@@ -356,8 +370,11 @@ function suggestChord(chordNumber, name, probabilities){
             // reset the list
             $('.chordListColumn3').empty()
 
-            // create the list
-            for(i=0;i<6;i++){
+            // hack to prevent duplicate chords in menu
+            var theseChords = []
+            // create the selectmenu
+            var j = 6 // need this to be variable in case there are duplicate chords. 
+            for(i=0;i<j;i++){
                 num = probabilities[i].chord_HTML
                 chordID = probabilities[i].chord_ID
                 // remove html tags
@@ -388,8 +405,16 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = chordName.replace('m7', 'm')
                 }
                 
-                // add chord names to the list
-                $('<li/>').val(chordID).html(`<a data-chord=${chordName} data-chordID=${chordID}>${chordName}</a>`).appendTo('#chordListColumn3');
+                // prevent chord being added twice (this is a quick fix)
+                if(theseChords.includes(chordName)){
+                    console.log('filtered', chordName)
+                    // add another index to search through the array of returned chords
+                    j++
+                } else {
+                    // add chord names to the list
+                    $('<li/>').val(chordID).html(`<a data-chord=${chordName} data-chordID=${chordID}>${chordName}</a>`).appendTo('#chordListColumn3');
+                    theseChords.push(chordName)
+                }
             }
         break;
     }
