@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>aCHORDingly - Chord Changing Practice Thigamajig</title>
+        <title>aCHORDingly - Practice Switching Between Chords</title>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
         
         <!-- Foundation CSS BEGIN -->
@@ -20,6 +20,14 @@
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
         <!-- jquery END -->
+        <!-- EmailJS for email form submission BEGIN-->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+        <script type="text/javascript">
+            (function() {
+                emailjs.init("user_V6yI0pvrzIhaeUNDHJdZu");
+            })();
+            </script>
+        <!-- EmailJS for email form submission END-->
 
 
     </head>
@@ -36,6 +44,7 @@
               <div class="top-bar" id="responsive-menu">
                 <div class="top-bar-right">
                   <ul class="dropdown menu" data-dropdown-menu>
+                    <li class="menu-text newUser">You must have a Hook Theory account in order to use aCHORDingly</li>
                     <li data-open="about"><a href="#about">About</a></li>
                     <li data-open="howitworks"><a href="#howitworks">How It Works</a></li>
                     <li data-open="contact"><a href="#contact">Contact</a></li>
@@ -56,7 +65,7 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-text">
-                <h2>You must have a Hook Theory account in order to use aCHORDingly</h2>
+                
             </div>
         </section>
 
@@ -66,18 +75,20 @@
             <div class="grid-x grid-margin-x grid-padding-x">
                 <!-- Choose First Chord -->
                 <div class="large-4 cell">
-                    <label for="chord1">Choose your first</label>
+                    <label for="chord1">Choose your first Chord</label>
                     <select name="chord1" id="chord1">
                         <option disabled selected>Select starting chord</option>
                     </select>
-                    <!-- fretboard diagram -->
-                    <div style="display: none;" class="chord1fretboard scales_chords_api" chord=""></div>
-                    <!-- fretboard sound -->
-                    <div class="chord1fretboardSound scales_chords_api" chord="" output="sound"></div>
-                    <!-- piano diagram -->
-                    <div class="chord1piano scales_chords_api" instrument="piano" chord=""></div>
-                    <!-- piano sound -->
-                    <div class="chord1pianoSound scales_chords_api" instrument="piano" chord="" output="sound"></div>
+                    <!-- Container for Diagrams -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Chord 1</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- This is where the diagrams will get appended to, using jQuery -->
+                            <div class="chord1DiagramContainer"></div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Suggested Next Chord -->
@@ -86,33 +97,55 @@
                     <select name="chord2" id="chord2">
                         <option disabled selected>Select second chord</option>
                     </select>
-                    <!-- fretboard diagram -->
-                    <div style="display: none;" class="chord2fretboard scales_chords_api" chord=""></div>
-                    <!-- fretboard sound -->
-                    <div class="chord2fretboardSound scales_chords_api" chord="" output="sound"></div>
-                    <!-- piano diagram -->
-                    <div class="chord2piano scales_chords_api" instrument="piano" chord=""></div>
-                    <!-- piano sound -->
-                    <div class="chord2pianoSound scales_chords_api" instrument="piano" chord="" output="sound"></div>
-                </div>
-                <!-- Most Common Chords Next -->
-                <div class="large-4 cell">
-                    <h4>Most-Common Chords after [Chord2]</h4>
-                    <ul name="chordListColumn3" class="chordListColumn3" id="chordListColumn3">
-                    </ul>
-                    <!-- user account menu -->
-                    <div class="userAccount" id="userAccount"></div>
-                        <label for="userAccountMenu">Account</label>
-                        <select name="userAccountMenu" id="userAccountMenu">
-                        <!-- place username here -->
-                            
-                        </select>
+                    <!-- Container for Diagrams -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Chord 2</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- This is where the diagrams will get appended to, using jQuery -->
+                            <div class="chord2DiagramContainer"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <!-- Column Three -->
+                <div class="large-4 cell">
 
-            <!-- Display Save Progression Window -->
-            <p><button class="button" data-open="saveYourProgress">Save Your Progress</button></p>
+                    <!-- user account menu -->
+                    <div class="userAccount" id="userAccount"></div>
+                        <label for="userAccountMenu">Hook Theory Account</label>
+                        <select name="userAccountMenu" id="userAccountMenu">
+                        <!-- place username here -->
+
+                        </select>
+
+                    <!-- Container for Common Chords -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Most Common Chords after Chord 2</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- This is where the most common chords will get appended to, using jQuery -->
+                            <ul name="chordListColumn3" class="chordListColumn3" id="chordListColumn3">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Container for Progression -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Progressions</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- Display Save Progression Window -->
+                            <p><button class="button" data-open="saveYourProgress">Save Your Progress</button></p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
 
             <!-- Saved Progressions -->
             <div class="medium reveal" id="saveYourProgress" data-reveal>
@@ -178,18 +211,18 @@
               <div class="grid-x grid-padding-x">
                 <div class="medium-6 cell">
                   <label>Name
-                    <input type="text" placeholder="Your full name">
+                    <input class="contactName" type="text" placeholder="Your full name">
                   </label>
                 </div>
                 <div class="medium-6 cell">
                   <label>Email Address
-                    <input type="email" placeholder="Email Address">
+                    <input class="contactEmail" type="email" placeholder="Email Address">
                   </label>
                 </div>
                 <div class="large-12 cell">
                     <label>
                         Question / Comment
-                        <textarea placeholder="Type your question or comment here"></textarea>
+                        <textarea class="contactMessage" placeholder="Type your question or comment here"></textarea>
                     </label>
                 </div>
                 <div>
