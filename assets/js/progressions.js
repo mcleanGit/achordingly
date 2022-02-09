@@ -145,7 +145,7 @@ var progression = {
         name: null, // i.e. C, E, G (pulled from keys.major or keys.minor)
         degree: 1, // hardcoded for now (1 means first note in the scale)
         quality: null, // major or minor
-        chordID: null // communication with hooktheoryAPI
+        chordID: 1 // communication with hooktheoryAPI
     },
     chord2:{
         name: null,
@@ -183,6 +183,7 @@ $( ".chordSetup" ).change(function(event) {
             diagram(".chord1piano", progression.chord1.name)
             diagram(".chord1fretboardSound", progression.chord1.name)
             diagram(".chord1pianoSound", progression.chord1.name)
+            $('.chord1fretboard').show();
             // clear any suggested chord2 content
             clearChord2()
             // chord column number here is 2, scale degree, chord name
@@ -210,19 +211,19 @@ $( ".chordSetup" ).change(function(event) {
 
 $( "#chordListColumn3" ).on("click", function(event) {
     degree = event.target.dataset.chordid
+    progression.chord1.chordID = degree
     // needs to reset the chord in column 1
 
     // add chord to menu, make it selected
     $('<option/>').val(degree).html(event.target.dataset.chord).appendTo('#chord1');
     // make it selected
     $('#chord1').val(degree);
-    // $("#chord1").selectmenu("refresh");
     
-        // update diagrams
-        diagram(".chord1fretboard", event.target.dataset.chord)
-        diagram(".chord1piano", event.target.dataset.chord)
-        diagram(".chord1fretboardSound", event.target.dataset.chord)
-        diagram(".chord1pianoSound", event.target.dataset.chord)
+    // update diagrams
+    diagram(".chord1fretboard", event.target.dataset.chord)
+    diagram(".chord1piano", event.target.dataset.chord)
+    diagram(".chord1fretboardSound", event.target.dataset.chord)
+    diagram(".chord1pianoSound", event.target.dataset.chord)
 
     nextChord(2, degree, event.target.dataset.chord)
 
