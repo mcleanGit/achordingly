@@ -43,19 +43,19 @@
                 <div class="title-bar-title">Menu</div>
               </div>
               
-              <div class="top-bar" id="responsive-menu">
+              <div class="top-bar funNavBar" id="responsive-menu">
                 <div class="top-bar-right">
                   <ul class="dropdown menu" data-dropdown-menu>
                     <li class="menu-text newUser">You must have a Hook Theory account in order to use aCHORDingly</li>
                     <li data-open="about"><a href="#about">About</a></li>
                     <li data-open="howitworks"><a href="#howitworks">How It Works</a></li>
                     <li data-open="contact"><a href="#contact">Contact</a></li>
-                    <li><button class="button" data-open="login-box">Login</button></li>
+                    <li><button class="button newUser" data-open="login-box">Login</button></li>
                     <li class="has-submenu">
                         <a href="#account">My Account</a>
-                        <ul class="submenu menu vertical" data-submenu>
+                        <ul id="userAct" class="submenu menu vertical" data-submenu>
                             <li><a href="https://www.hooktheory.com/account" target="_blank">Manage</a></li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a class="logout" href="#">Logout</a></li>
                         </ul>
                     </li>
                   </ul>
@@ -143,8 +143,6 @@
                             <p><button class="button" data-open="saveYourProgress">Save Your Progress</button></p>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -153,11 +151,11 @@
             <div class="medium reveal" id="saveYourProgress" data-reveal>
                 <h2>Save Your Progress</h2>
                 <input type="text" id="savedName" name="savedName">
-                        <button id="SaveSession">Save Session</button>
+                        <button class="button" id="SaveSession">Save Session</button>
 
-                        <select name="SavedProgressions" id="HistoryID">
-                            <option disabled selected>--Saved Progressions--</option>
-                        </select>
+                <select name="SavedProgressions" id="HistoryID">
+                    <option disabled selected>--Saved Progressions--</option>
+                </select>
                 <button class="close-button" data-close aria-label="Close Modal" type="button">
                     <span aria-hidden="true">&times;</span>
                 </button>
