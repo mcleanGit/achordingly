@@ -20,6 +20,14 @@
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
         <!-- jquery END -->
+        <!-- EmailJS for email form submission BEGIN-->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+        <script type="text/javascript">
+        (function() {
+        emailjs.init("user_V6yI0pvrzIhaeUNDHJdZu");
+        })();
+        </script>
+        <!-- EmailJS for email form submission END-->
 
 
     </head>
@@ -166,18 +174,18 @@
               <div class="grid-x grid-padding-x">
                 <div class="medium-6 cell">
                   <label>Name
-                    <input type="text" placeholder="Your full name">
+                    <input class="contactName" type="text" placeholder="Your full name">
                   </label>
                 </div>
                 <div class="medium-6 cell">
                   <label>Email Address
-                    <input type="email" placeholder="Email Address">
+                    <input class="contactEmail" type="email" placeholder="Email Address">
                   </label>
                 </div>
                 <div class="large-12 cell">
                     <label>
                         Question / Comment
-                        <textarea placeholder="Type your question or comment here"></textarea>
+                        <textarea class="contactMessage" placeholder="Type your question or comment here"></textarea>
                     </label>
                 </div>
                 <div>
