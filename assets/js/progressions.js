@@ -202,7 +202,7 @@ $( ".chordSetup" ).change(function(event) {
             diagram(".chord2piano", progression.chord2.name)
             diagram(".chord2fretboardSound", progression.chord2.name)
             diagram(".chord2pianoSound", progression.chord2.name)
-            
+
             nextChord(3, degree, name)
         break
     }
@@ -218,6 +218,11 @@ $( "#chordListColumn3" ).on("click", function(event) {
     $('#chord1').val(degree);
     // $("#chord1").selectmenu("refresh");
     
+        // update diagrams
+        diagram(".chord1fretboard", event.target.dataset.chord)
+        diagram(".chord1piano", event.target.dataset.chord)
+        diagram(".chord1fretboardSound", event.target.dataset.chord)
+        diagram(".chord1pianoSound", event.target.dataset.chord)
 
     nextChord(2, degree, event.target.dataset.chord)
 
@@ -297,10 +302,9 @@ function suggestChord(chordNumber, name, probabilities){
         
                     // now grab suggested chords for column 3 based on selected chord 2
                     chord = Tonal.RomanNumeral.get(num);
-                    console.log(progression.keyInfo)
-                    console.log(progression.chord1)
 
                     degree = chord.step + 1
+                    // update diagrams
                     diagram(".chord2fretboard", progression.chord2.name)
                     diagram(".chord2piano", progression.chord2.name)
                     diagram(".chord2fretboardSound", progression.chord2.name)
