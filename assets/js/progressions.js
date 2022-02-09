@@ -405,7 +405,7 @@ function populateHistory(){
     // Todo include list population for #HistoryID
     for(i=1;i<(currentStorage.length);i++){
         var tempName = currentStorage[i].userSavedName;
-        $('<option/>').val(tempName).html(tempName).appendTo('#HistoryID'); // changes savedname if added
+        $('<option/>').val(tempName).html(currentStorage[i].userSavedName).appendTo('#HistoryID'); // changes savedname if added
     }
 
 }
