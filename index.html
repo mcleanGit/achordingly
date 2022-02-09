@@ -70,7 +70,10 @@
                     <select name="chord1" id="chord1">
                         <option disabled selected>Select starting chord</option>
                     </select>
+                    <!-- fretboard diagram -->
+                    <div class="chord1fretboard scales_chords_api" chord=""></div>
                 </div>
+                
                 <!-- Suggested Next Chord -->
                 <div class="large-4 cell">
                     <label for="chord2">Suggested Chord</label>
@@ -79,6 +82,8 @@
                     </select>
                     <div id="chord2diagram" class="chord2diagram"></div>
                     <label for="chordListcolumn3">Suggested Chord</label>
+
+ 
                 </div>
                 <!-- Most Common Chords Next -->
                 <div class="large-4 cell">
@@ -203,7 +208,7 @@
         </button>
     </div>
 
-            
+
 
         <!-- Footer -->
         <footer>
@@ -216,6 +221,7 @@
         <!-- our JS file(s) BEGIN -->
         <script src="./assets/js/progressions.js"></script>
         <!-- our JS file(s) END -->
+        <!-- chord diagrams api BEGIN -->
 
         <!-- chord iagrams api END -->
         <!-- tonalJS for scales/chords lookup tables -->

@@ -157,9 +157,6 @@ var progression = {
     }
 }
 
-function getChord(chordName){
-
-}
 // given chord choices in the dropdown of either column 1 or column 2:
 $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
@@ -182,7 +179,7 @@ $( ".chordSetup" ).change(function(event) {
 
                 break;
             }
-            
+            diagram(".chord1fretboard", progression.chord1.name)
             // clear any suggested chord2 content
             clearChord2()
             // chord column number here is 2, scale degree, chord name
@@ -200,6 +197,7 @@ $( ".chordSetup" ).change(function(event) {
         break
     }
 })
+
 $( "#chordListColumn3" ).on("click", function(event) {
     degree = event.target.dataset.chordid
     // needs to reset the chord in column 1
@@ -349,7 +347,7 @@ function suggestChord(chordNumber, name, probabilities){
 }
 
 function clearChord2(){
-    $('.chord2diagram').text('')
+    // $('.chord2diagram').text('')
     function removeOptions(selectElement) {
         var i, L = selectElement.options.length - 1;
         for(i = L; i >= 0; i--) {
@@ -363,6 +361,14 @@ function clearChord2(){
 
 function systemMsg(msg){
     $('.systemMsg').text(msg)
+}
+
+// diagrams
+function diagram(selector, chord){
+    var diagram = document.querySelector(selector)
+    diagram.setAttribute('chord', chord)
+    scales_chords_api_onload()
+
 }
 
 // Save progression
