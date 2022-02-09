@@ -367,7 +367,7 @@ function systemMsg(msg){
 
 // Save progression
 var saveSessionButton = $("#SaveSession");
-var currentStorage = [null]; // ask if to add savename to changes object so we don't have to inherit
+var currentStorage = [null];
 var historySelect = $('#HistoryID');
 
 if(localStorage.getItem('progressionStorage')){
@@ -378,8 +378,9 @@ function populateHistory(){
     currentStorage = JSON.parse(localStorage.getItem('progressionStorage'));
 
     // Todo include list population for #HistoryID
-    for(i=0;i<currentStorage.length;i++){
-        //$('<option/>').text(progression.savename).appendTo(historySelect); // changes savedname if added
+    for(i=1;i<(currentStorage.length);i++){
+        var tempName = currentStorage[i].userSavedName;
+        $('<option/>').val(tempName).html(tempName).appendTo('#HistoryID'); // changes savedname if added
     }
 
 }
@@ -390,16 +391,25 @@ saveSessionButton.click(function(event){
     console.log('current storage', currentStorage);
 
     currentStorage.push(JSON.parse(JSON.stringify(progression))); // ask if there should be a limit
-    //console.log(JSON.stringify(currentStorage));
+    //currentStorage.push(progression);
+
+    $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
 });
 
 historySelect.change(function(event){
-    //var returnPosition = $('option:selected',this).index();
-    // returnPosition--;
-    // document.getElementById('chord1').value = currentStorage[returnPosition].chord1.name;
-    // document.getElementById('chord2').value = currentStorage[returnPosition].chord2.name;
-    // suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
+    var returnPosition = $('option:selected',this).index();
 
-    //console.log(returnPosition);
+    console.log(currentStorage[returnPosition].chord1.name,currentStorage[returnPosition].chord2.name);
+
+    //$('#chord1').val(currentStorage[returnPosition].chord1.name).change();
+    //$('#chord1 option:contains('+ currentStorage[returnPosition].chord1.name + ')').prop('selected',true);
+    //$(".chordSetup").trigger('event');
+    var degree = currentStorage[returnPosition].chord1.degree;
+    
+    console.log(degree, currentStorage[returnPosition].chord1.name);
+    
+    clearChord2();
+    nextChord(2, degree, currentStorage[returnPosition].chord1.name);
+    //$('#chord2 option:contains('+ currentStorage[returnPosition].chord2.name + ')').prop('selected',true);
 })
