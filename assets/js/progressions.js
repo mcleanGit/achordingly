@@ -8,31 +8,37 @@ var credentials = {
     password: null
 }
 
+// $(".funNavBar").click(function (event) {
+//     console.log(event.target)
+// })
+$("#userAct li").on("click", function(){
+    var choice = $(this).text()
+    switch (choice){
+        case "Logout":
+
+            // clear credentials from localStorage
+            credentials.username = null
+            credentials.password = null
+            localStorage.removeItem('username')
+            localStorage.removeItem('password')
+
+            // TODO remove Login menu from DOM, or at least hide it. 
+
+            // refresh the page
+            location.reload();
+            return false;
+
+            // $( "#dialog" ).dialog({
+            //     show: { effect: "blind", duration: 500 }
+            // });
+
+        break
+    }
+});
 
 // if the user signs out, reset the login creds and relaunch the login dialog
 $( "#userAccountMenu" ).change(function(event) {
-    
-    var choice = $("#userAccountMenu option:selected").text()
-    if(choice === 'Sign Out'){
-        // clear credentials from localStorage
-        credentials.username = null
-        credentials.password = null
-        localStorage.removeItem('username')
-        localStorage.removeItem('password')
-        // clear useraccount menu
-        function removeOptions(selectElement) {
-            var i, L = selectElement.options.length - 1;
-            for(i = L; i >= 0; i--) {
-                selectElement.remove(i);
-            }
-        }
-        removeOptions(document.getElementById('userAccountMenu'))
 
-        
-        $( "#dialog" ).dialog({
-            show: { effect: "blind", duration: 500 }
-        });
-    }
 })
 // if no stored username data...
 if(localStorage.getItem('username') === null){
@@ -107,7 +113,7 @@ function oAuth(dialog){
                 // $( "#login-box" ).hide()
                 // $('.signin').modal('hide');
                 // var div = $(this).closest('div.reveal-modal').first();
-                loginModal.close()
+                // loginModal.close()
                 // $( "#dialog" ).hide( "slow", function() {
                 //     $('#dialog').dialog('close')
                 // });
