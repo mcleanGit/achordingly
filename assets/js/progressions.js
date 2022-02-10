@@ -189,7 +189,6 @@ function chord1Diagrams(){
 }
 
 function chord1Details(justChord1){
-    console.log(progression.chord1.name)
     // if sharp/flat chosen, just get the sharp
     if(progression.chord1.name.includes('/')){
         progression.chord1.name = progression.chord1.name.split('/')[1]
@@ -201,7 +200,6 @@ function chord1Details(justChord1){
         
         case 'major':
         // case '':
-            console.log(progression.chord1.quality)
             progression.keyInfo = Tonal.Key.majorKey(progression.key)
 
         break;
@@ -300,7 +298,6 @@ $( "#chordListColumn3" ).on("click", function(event) {
 
 })
 function nextChord(chordNumber, degree, name){
-    console.log(chordNumber, degree, name)
     systemMsg('Accessing chord database, please wait...')
     var bearerToken = localStorage.getItem("hookTheoryBearerToken")
     
@@ -319,7 +316,6 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        console.log(data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
@@ -349,7 +345,6 @@ function suggestChord(chordNumber, name, probabilities){
                     } 
                 // get number from numeral
                 chord = Tonal.RomanNumeral.get(num);
-                console.log(chord)
 
                 // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
                 var index;
@@ -399,7 +394,7 @@ function suggestChord(chordNumber, name, probabilities){
                 }
                 // prevent chord being added twice (this is a quick fix)
                 if(theseChords.includes(chordName)){
-                    console.log('filtered', chordName)
+
                     // add another index to search through the array of returned chords
                     j++
                 } else {
@@ -455,7 +450,7 @@ function suggestChord(chordNumber, name, probabilities){
                 
                 // prevent chord being added twice (this is a quick fix)
                 if(theseChords.includes(chordName)){
-                    console.log('filtered', chordName)
+
                     // add another index to search through the array of returned chords
                     j++
                 } else {
@@ -487,7 +482,7 @@ function systemMsg(msg){
 
 // diagrams
 function diagram(selector, chord){
-    console.log(selector)
+
     var diagram = document.querySelector(selector)
     diagram.setAttribute('chord', chord)
     scales_chords_api_onload()
@@ -559,7 +554,7 @@ historySelect.change(function(event){
     // assigns progression object the values of saved session
     progression = JSON.parse(JSON.stringify(currentStorage[returnPosition]))
     
-    console.log(progression)
+
     // check if chord exists in base list
     var valuecheck = progression.chord1.name.replace(/\s+/g,"_");
 
