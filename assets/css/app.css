@@ -18,8 +18,9 @@ fieldset {
 
 
 /* Header */
-    header h1 {
+    header {
         text-align: center;
+        background-color: rgba(0, 0, 0, 0.05);
     }
 
 
@@ -45,3 +46,4 @@ fieldset {
     background-position: center;
 }
 /* Hero styles END */
+
