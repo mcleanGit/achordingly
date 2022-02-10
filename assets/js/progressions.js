@@ -163,7 +163,9 @@ var progression = {
         
     },
     mostCommonAfter2:{
-        chords: []
+        chords: [],
+        chordIDs: []
+        // {name: name, id: id}
     }
 }
 function chord1Diagrams(){
@@ -209,7 +211,7 @@ function chord1Details(justChord1){
     } else {
         // clear any suggested chord2 content
         clearChord2()
-        // chord column number here is 2, scale degree, chord name
+        // chord column number here clearChord2()is 2, scale degree, chord name
         nextChord(2, progression.chord1.degree, progression.chord1.name)
     }
 
@@ -520,6 +522,7 @@ saveSessionButton.click(function(event){
     var arrayCol3 = [];
     $('#chordListColumn3 li').each(function(){
         arrayCol3.push($(this).text())
+        progression.mostCommonAfter2.chordIDs = $(this).val()
     });
     progression.mostCommonAfter2.chords = arrayCol3;
     //console.log('col 3',progression.mostCommonAfter2.chords);
@@ -602,8 +605,10 @@ historySelect.change(function(event){
     //nextChord(3,progression.chord2.degree,progression.chord2.name);
     $('.chordListColumn3').empty();
     for(i=0; i < progression.mostCommonAfter2.chords.length;i++){
-    $('<li/>').html(progression.mostCommonAfter2.chords[i]).appendTo('#chordListColumn3');
+    // $('<li/>').html(progression.mostCommonAfter2.chords[i]).appendTo('#chordListColumn3');
+        $('<li/>').val(progression.mostCommonAfter2.chordIDs[i]).html(`<a data-chord=${progression.mostCommonAfter2.chords[i]} data-chordID=${progression.mostCommonAfter2.chordIDs[i]}>${progression.mostCommonAfter2.chords[i]}</a>`).appendTo('#chordListColumn3');
     }
+
 
 
 })
