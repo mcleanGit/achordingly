@@ -522,9 +522,7 @@ historySelect.change(function(event){
         $('#chord1').val(valuecheck);
     }
 
-
-    var degree = currentStorage[returnPosition].chord1.degree;
-
+    // clears chord 2
     clearChord2();
 
     // remove diagrams from container
@@ -543,11 +541,26 @@ historySelect.change(function(event){
     diagram(".chord1pianoSound", progression.chord1.name)
 
     // updates chord 2
-    nextChord(2, progression.chord1.degree, progression.chord1.name);
+    //nextChord(2, progression.chord1.degree, progression.chord1.name);
 
-    
-    //console.log(degree, currentStorage[returnPosition].chord1.name);
-    
+    // Select Chord 2 from history    
+    $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
+    $('#chord2').val(progression.chord2.chordID);
+
+    // remove diagrams from container
+    $( ".chord2DiagramContainer" ).empty();
+    // add/re-add the div diagrams in the DOM
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboard scales_chords_api" chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboardSound scales_chords_api" chord="${progression.chord2.name}" output="sound"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2piano scales_chords_api" instrument="piano"  chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2pianoSound scales_chords_api" instrument="piano" chord="${progression.chord2.name}" output="sound"></div>`)
+    // update diagrams
+    diagram(".chord2fretboard", progression.chord2.name)
+    diagram(".chord2piano", progression.chord2.name)
+    diagram(".chord2fretboardSound", progression.chord2.name)
+    diagram(".chord2pianoSound", progression.chord2.name)    
+
+
 })
 
 
