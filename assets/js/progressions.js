@@ -8,31 +8,37 @@ var credentials = {
     password: null
 }
 
+// $(".funNavBar").click(function (event) {
+//     console.log(event.target)
+// })
+$("#userAct li").on("click", function(){
+    var choice = $(this).text()
+    switch (choice){
+        case "Logout":
+
+            // clear credentials from localStorage
+            credentials.username = null
+            credentials.password = null
+            localStorage.removeItem('username')
+            localStorage.removeItem('password')
+
+            // TODO remove Login menu from DOM, or at least hide it. 
+
+            // refresh the page
+            location.reload();
+            return false;
+
+            // $( "#dialog" ).dialog({
+            //     show: { effect: "blind", duration: 500 }
+            // });
+
+        break
+    }
+});
 
 // if the user signs out, reset the login creds and relaunch the login dialog
 $( "#userAccountMenu" ).change(function(event) {
-    
-    var choice = $("#userAccountMenu option:selected").text()
-    if(choice === 'Sign Out'){
-        // clear credentials from localStorage
-        credentials.username = null
-        credentials.password = null
-        localStorage.removeItem('username')
-        localStorage.removeItem('password')
-        // clear useraccount menu
-        function removeOptions(selectElement) {
-            var i, L = selectElement.options.length - 1;
-            for(i = L; i >= 0; i--) {
-                selectElement.remove(i);
-            }
-        }
-        removeOptions(document.getElementById('userAccountMenu'))
 
-        
-        $( "#dialog" ).dialog({
-            show: { effect: "blind", duration: 500 }
-        });
-    }
 })
 // if no stored username data...
 if(localStorage.getItem('username') === null){
@@ -91,6 +97,8 @@ function oAuth(dialog){
         if(data.username === credentials.username){
             // it worked
             systemMsg('Signed In!')
+            // hide newUser message once signed in
+            $('.newUser').hide()
             $('<option/>').val(credentials.username).html(credentials.username).appendTo('#userAccountMenu');
             $('<option/>').val('Sign Out').html('Sign Out').appendTo('#userAccountMenu');
             // store bearer token in localStorage (note that this will expire)
@@ -105,7 +113,7 @@ function oAuth(dialog){
                 // $( "#login-box" ).hide()
                 // $('.signin').modal('hide');
                 // var div = $(this).closest('div.reveal-modal').first();
-                loginModal.close()
+                // loginModal.close()
                 // $( "#dialog" ).hide( "slow", function() {
                 //     $('#dialog').dialog('close')
                 // });
@@ -270,7 +278,7 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        
+        console.log(data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
@@ -286,8 +294,11 @@ function suggestChord(chordNumber, name, probabilities){
             // reset the selectmenu
             clearChord2()
 
+            // hack to prevent duplicate chords in menu
+            var theseChords = []
             // create the selectmenu
-            for(i=0;i<6;i++){
+            var j = 6 // need this to be variable in case there are duplicate chords. 
+            for(i=0;i<j;i++){
                 num = probabilities[i].chord_HTML
                 // remove html tags
                 num = num.replace(/<[^>]+>/g, '').toUpperCase();
@@ -297,6 +308,7 @@ function suggestChord(chordNumber, name, probabilities){
                     } 
                 // get number from numeral
                 chord = Tonal.RomanNumeral.get(num);
+                
 
                 // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
                 var index;
@@ -317,6 +329,8 @@ function suggestChord(chordNumber, name, probabilities){
                     // remove maj7, its confusing to guitarists and redundant
                     chordName = chordName.replace('m7', 'm')
                 }
+
+                
                 // here is where we need to fire chord selection2 so that list 3 populates. 
                 if(i===0){
                     progression.chord2.name = chordName
@@ -342,9 +356,17 @@ function suggestChord(chordNumber, name, probabilities){
                     diagram(".chord2pianoSound", progression.chord2.name)
                     nextChord(3, degree, name)
                 }
-                
-                // add chord names to the chord2 dropdown menu
-                $('<option/>').val(num).html(chordName).appendTo('#chord2');
+                // prevent chord being added twice (this is a quick fix)
+                if(theseChords.includes(chordName)){
+                    console.log('filtered', chordName)
+                    // add another index to search through the array of returned chords
+                    j++
+                } else {
+                    // add chord names to the chord2 dropdown menu
+                    $('<option/>').val(num).html(chordName).appendTo('#chord2');
+                    theseChords.push(chordName)
+                }
+
             }
             systemMsg('Chord suggestions returned!')
 
@@ -356,8 +378,11 @@ function suggestChord(chordNumber, name, probabilities){
             // reset the list
             $('.chordListColumn3').empty()
 
-            // create the list
-            for(i=0;i<6;i++){
+            // hack to prevent duplicate chords in menu
+            var theseChords = []
+            // create the selectmenu
+            var j = 6 // need this to be variable in case there are duplicate chords. 
+            for(i=0;i<j;i++){
                 num = probabilities[i].chord_HTML
                 chordID = probabilities[i].chord_ID
                 // remove html tags
@@ -388,8 +413,16 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = chordName.replace('m7', 'm')
                 }
                 
-                // add chord names to the list
-                $('<li/>').val(chordID).html(`<a data-chord=${chordName} data-chordID=${chordID}>${chordName}</a>`).appendTo('#chordListColumn3');
+                // prevent chord being added twice (this is a quick fix)
+                if(theseChords.includes(chordName)){
+                    console.log('filtered', chordName)
+                    // add another index to search through the array of returned chords
+                    j++
+                } else {
+                    // add chord names to the list
+                    $('<li/>').val(chordID).html(`<a data-chord=${chordName} data-chordID=${chordID}>${chordName}</a>`).appendTo('#chordListColumn3');
+                    theseChords.push(chordName)
+                }
             }
         break;
     }
@@ -421,42 +454,115 @@ function diagram(selector, chord){
 
 }
 
-// Save progression
-var saveSessionButton = $("#SaveSession");
-var currentStorage = [null]; // ask if to add savename to changes object so we don't have to inherit
+// Save Session History
+var saveSessionButton = $("#SaveSession"); 
+var currentStorage = [null]; // index 0 set to null for handling purposes
 var historySelect = $('#HistoryID');
 
-if(localStorage.getItem('progressionStorage')){
-    populateHistory(); //populate list with progression history
+// checks local storage for previously saved sessions
+if(localStorage.getItem('progressionStorage')){ 
+
+    // assigns array with prior session
+    currentStorage = JSON.parse(localStorage.getItem('progressionStorage')); 
+    //populates list with session history
+    populateHistory(); 
 }
 
 function populateHistory(){
-    currentStorage = JSON.parse(localStorage.getItem('progressionStorage'));
 
-    // Todo include list population for #HistoryID
-    for(i=0;i<currentStorage.length;i++){
-        //$('<option/>').text(progression.savename).appendTo(historySelect); // changes savedname if added
+    // List population for dropdown with #HistoryID
+    for(i=1;i<(currentStorage.length);i++){
+        var tempName = currentStorage[i].userSavedName;
+        $('<option/>').val(tempName).html(currentStorage[i].userSavedName).appendTo('#HistoryID');
     }
 }
 
+// Saving new session button
 saveSessionButton.click(function(event){
-    progression.userSavedName = $('#savedName').val();
-    console.log('current storage', currentStorage);
+    
+    // assigns users assigned name to saved progression object
+    progression.userSavedName = $('#savedName').val(); 
 
-    currentStorage.push(JSON.parse(JSON.stringify(progression))); // ask if there should be a limit
-    //console.log(JSON.stringify(currentStorage));
+    // adds new instance of progression to current session array
+    currentStorage.push(JSON.parse(JSON.stringify(progression))); 
+
+    // adds session to dropdown
+    $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
+    
+    // assigns chord 1 with name of suggested chord
+    progression.chord1.name = $('#chord1 option:selected').text();
+    console.log($('#chord1 option:selected').text());
+    // updates localstorage with new array of saved sessions
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
 });
 
+// Selecting item from saved sessions dropdown
 historySelect.change(function(event){
-    //var returnPosition = $('option:selected',this).index();
-    // returnPosition--;
-    // document.getElementById('chord1').value = currentStorage[returnPosition].chord1.name;
-    // document.getElementById('chord2').value = currentStorage[returnPosition].chord2.name;
-    // suggestChord(currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name, currentStorage[returnPosition].chord2.name);
 
-    //console.log(returnPosition);
+    // obtains which prior session selected, index of dropdown is equal to array as index 0 of both is unselectable/null
+    var returnPosition = $('option:selected',this).index();
+
+    // test to see if selections is returning correct session
+    //console.log(currentStorage[returnPosition].chord1.name,currentStorage[returnPosition].chord2.name);
+
+    // assigns progression object the values of saved session
+    progression = JSON.parse(JSON.stringify(currentStorage[returnPosition]))
+    
+    // check if chord exists in base list
+    var valuecheck = progression.chord1.name.replace(/\s+/g,"_");
+
+    if($('#chord1 option[value=' + valuecheck + ']').length > 0){
+        
+        //select chord 1 from base values
+        $('#chord1').val(valuecheck);
+
+    } else {
+        // adds chord if not included in base options
+        $('<option/>').val(valuecheck).html(valuecheck).appendTo('#chord1');
+        $('#chord1').val(valuecheck);
+    }
+
+    // clears chord 2
+    clearChord2();
+
+    // remove diagrams from container
+    $( ".chord1DiagramContainer" ).empty();
+    
+    // add/re-add the div diagrams in the DOM
+    $(".chord1DiagramContainer").append(`<div class="chord1fretboard scales_chords_api" chord="${progression.chord1.name}"></div>`)
+    $(".chord1DiagramContainer").append(`<div class="chord1fretboardSound scales_chords_api" chord="${progression.chord1.name}" output="sound"></div>`)
+    $(".chord1DiagramContainer").append(`<div class="chord1piano scales_chords_api" instrument="piano"  chord="${progression.chord1.name}"></div>`)
+    $(".chord1DiagramContainer").append(`<div class="chord1pianoSound scales_chords_api" instrument="piano" chord="${progression.chord1.name}" output="sound"></div>`)
+    
+    // update diagrams
+    diagram(".chord1fretboard", progression.chord1.name)
+    diagram(".chord1piano", progression.chord1.name)
+    diagram(".chord1fretboardSound", progression.chord1.name)
+    diagram(".chord1pianoSound", progression.chord1.name)
+
+    // updates chord 2
+    //nextChord(2, progression.chord1.degree, progression.chord1.name);
+
+    // Select Chord 2 from history    
+    $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
+    $('#chord2').val(progression.chord2.chordID);
+
+    // remove diagrams from container
+    $( ".chord2DiagramContainer" ).empty();
+    // add/re-add the div diagrams in the DOM
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboard scales_chords_api" chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboardSound scales_chords_api" chord="${progression.chord2.name}" output="sound"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2piano scales_chords_api" instrument="piano"  chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2pianoSound scales_chords_api" instrument="piano" chord="${progression.chord2.name}" output="sound"></div>`)
+    // update diagrams
+    diagram(".chord2fretboard", progression.chord2.name)
+    diagram(".chord2piano", progression.chord2.name)
+    diagram(".chord2fretboardSound", progression.chord2.name)
+    diagram(".chord2pianoSound", progression.chord2.name)    
+
+
 })
+
 
 
 // use this to send emails from within our app :)

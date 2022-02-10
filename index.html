@@ -4,9 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>aCHORDingly - Chord Changing Practice Thigamajig</title>
+        <title>aCHORDingly - Practice Switching Between Chords</title>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
         
+        <link rel="icon" href="assets/images/favicon.ico">
+
         <!-- Foundation CSS BEGIN -->
         <link rel="stylesheet" href="assets/css/foundation.css">
         <link rel="stylesheet" href="assets/css/app.css">
@@ -23,10 +25,10 @@
         <!-- EmailJS for email form submission BEGIN-->
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
         <script type="text/javascript">
-        (function() {
-        emailjs.init("user_V6yI0pvrzIhaeUNDHJdZu");
-        })();
-        </script>
+            (function() {
+                emailjs.init("user_V6yI0pvrzIhaeUNDHJdZu");
+            })();
+            </script>
         <!-- EmailJS for email form submission END-->
 
 
@@ -34,25 +36,26 @@
     <body>
         <!-- Navigation -->
         <header>
-            <h1><a href="/">aCHORDingly</a></h1>
+            <img src="./assets/images/aCHORDingly.png" />
 
             <div class="title-bar" data-responsive-toggle="responsive-menu" data-hide-for="medium">
                 <button class="menu-icon" type="button" data-toggle="responsive-menu"></button>
                 <div class="title-bar-title">Menu</div>
               </div>
               
-              <div class="top-bar" id="responsive-menu">
+              <div class="top-bar funNavBar" id="responsive-menu">
                 <div class="top-bar-right">
                   <ul class="dropdown menu" data-dropdown-menu>
+                    <li class="menu-text newUser">You must have a Hook Theory account in order to use aCHORDingly</li>
                     <li data-open="about"><a href="#about">About</a></li>
                     <li data-open="howitworks"><a href="#howitworks">How It Works</a></li>
                     <li data-open="contact"><a href="#contact">Contact</a></li>
-                    <li><button class="button" data-open="login-box">Login</button></li>
+                    <li><button class="button newUser" data-open="login-box">Login</button></li>
                     <li class="has-submenu">
                         <a href="#account">My Account</a>
-                        <ul class="submenu menu vertical" data-submenu>
+                        <ul id="userAct" class="submenu menu vertical" data-submenu>
                             <li><a href="https://www.hooktheory.com/account" target="_blank">Manage</a></li>
-                            <li><a href="#">Logout</a></li>
+                            <li><a class="logout" href="#">Logout</a></li>
                         </ul>
                     </li>
                   </ul>
@@ -64,7 +67,7 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-text">
-                <h2>You must have a Hook Theory account in order to use aCHORDingly</h2>
+                
             </div>
         </section>
 
@@ -74,12 +77,20 @@
             <div class="grid-x grid-margin-x grid-padding-x">
                 <!-- Choose First Chord -->
                 <div class="large-4 cell">
-                    <label for="chord1">Choose your first</label>
+                    <label for="chord1">Choose your first Chord</label>
                     <select name="chord1" id="chord1">
                         <option disabled selected>Select starting chord</option>
                     </select>
-                    <!-- This is where the diagrams will get appended to, using jQuery -->
-                    <div class="chord1DiagramContainer"></div>
+                    <!-- Container for Diagrams -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Chord 1</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- This is where the diagrams will get appended to, using jQuery -->
+                            <div class="chord1DiagramContainer"></div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Suggested Next Chord -->
@@ -88,42 +99,75 @@
                     <select name="chord2" id="chord2">
                         <option disabled selected>Select second chord</option>
                     </select>
-                    <!-- This is where the diagrams will get appended to, using jQuery -->
-                    <div class="chord2DiagramContainer"></div>
+                    <!-- Container for Diagrams -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Chord 2</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- This is where the diagrams will get appended to, using jQuery -->
+                            <div class="chord2DiagramContainer"></div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Most Common Chords Next -->
+                <!-- Column Three -->
                 <div class="large-4 cell">
-                    <h4>Most-Common Chords after [Chord2]</h4>
-                    <ul name="chordListColumn3" class="chordListColumn3" id="chordListColumn3">
-                    </ul>
-                    <!-- user account menu -->
+
+                    <!--
+
                     <div class="userAccount" id="userAccount"></div>
-                        <label for="userAccountMenu">Account</label>
+                        <label for="userAccountMenu">Hook Theory Account</label>
                         <select name="userAccountMenu" id="userAccountMenu">
-                        <!-- place username here -->
-                            
+
                         </select>
+                    -->
+
+                        <label for="loadSession">Load a Session</label>
+                        <select name="SavedProgressions" id="HistoryID">
+                            <option disabled selected>--Saved Sessions--</option>
+                        </select>
+
+                    <!-- Container for Common Chords -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Most Common Chords after Chord 2</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- This is where the most common chords will get appended to, using jQuery -->
+                            <ul name="chordListColumn3" class="chordListColumn3" id="chordListColumn3">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Container for Session -->
+                    <div class="card">
+                        <div class="card-divider">
+                          <h4>Save Your Session</h4>
+                        </div>
+                        <div class="card-section">
+                            <!-- Display Save Session Window -->
+                            <p><button class="button" data-open="saveYourProgress">Save</button></p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Display Save Progression Window -->
-            <p><button class="button" data-open="saveYourProgress">Save Your Progress</button></p>
-
-            <!-- Saved Progressions -->
+            <!-- Save Session -->
             <div class="medium reveal" id="saveYourProgress" data-reveal>
-                <h2>Save Your Progress</h2>
-                <input type="text" id="savedName" name="savedName">
-                        <button id="SaveSession">Save Session</button>
-
+                <h2>Save Your Session</h2>
+                <input type="text" id="savedName" name="savedName" placeholder="Type a name for your session">
+                        <button class="button" id="SaveSession">Save Session</button>
+                <!--
                         <select name="SavedProgressions" id="HistoryID">
-                            <option disabled selected>--Saved Progressions--</option>
-                        </select>
+                    <option disabled selected>--Saved Progressions--</option>
+                </select>
+                -->
+                <p class="modal-close-button"><button class="button" data-close>Close</button></p>
                 <button class="close-button" data-close aria-label="Close Modal" type="button">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
         </div>
        
         <!-- login -->
@@ -147,6 +191,18 @@
             <h2>About aCHORDingly</h2>
             <p>aCHORDingly is the brainchild of Cinco Swim Solutions</p>
             <p>As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords.</p>
+            <p>Most of us have had the experience of wanting to learn a few songs.
+                And we soon see that there are chords and chord diagrams that we need to figure out.  It’s easy to get overwhelmed!
+                aCHORDingly focuses on an important subset skill: putting two or three chords together. You select a chord and practice that. 
+            </p>
+            <p>
+                Our app then suggests a probable second chord. You can then practice putting the two chords together to build fluency.
+                And perhaps choose a third chord to add or try a new session.
+                Before long, you will begin to develop the dexterity and aural skills to tackle those songs!
+            </p>
+            <p>aCHORDingly: we know this approach really builds key abilities.</p>
+            <p>See How It Works for more details. 
+                And happy CHORDing!</p>
             <p class="modal-close-button"><button class="button" data-close>Close</button></p>
             <button class="close-button" data-close aria-label="Close Modal" type="button">
                 <span aria-hidden="true">&times;</span>
@@ -157,8 +213,14 @@
         <!-- How It Works Section/Modal -->
         <div class="large reveal" id="howitworks" title="How It Works" data-reveal>
             <h2>How It Works</h2>
-            <p>aCHORDingly is the brainchild of Cinco Swim Solutions</p>
             <p>stipulation in the login that users need to change their hooktheory password manually if they joined via google auth.</p>
+            <p>See About aCHORDingly for a brief introduction to its goal and purpose.</p>
+            <p>aCHORDingly helps you learn how to connect chords, an important skillset in learning songs. When you chose Chord1, our application suggests Chord2, as well as some alternative options. The application also returns a list of other probable chords based on your choices.</p>
+            <p>aCHORDingly uses several public-domain APIs (Application Programming Interfaces), which are databases that store a lot of different information about objects, such as lists of songs, music-theory basics, guitar and piano chords, and sounds.</p>
+            <p>The main API aCHORDingly works with to get you up and chording is hooktheory.com.  Please use click Login in the top bar to open (or sign into) your free hooktheory account. (Please note that users will need to change their hooktheory password manually if they joined via Google authentication.)</p>
+            <p>Once you are Signed In! aCHORDingly will ask you to choose your first Chord from the pulldown menu on the left-hand column of the page. That’s your starting point. Of course you’ll want to get practicing right away and master the fingering and listen to the sound of that chord. Great! So, what next?</p>
+            <p>Once you have chosen your first Chord, aCHORDingly automatically searches the musical database to generate a suggested second chord.  The pulldown menu also allows you to choose some alternatives and provides a list of probable additional chords based on your choices.  Neat!</p>
+            <p>You can save your Session and practice your selections again another time.  And you can continue to develop your vocabulary, dexterity, and aural skills with every session as you expand your knowledge. Before long you’ll be using aCHORDingly to practice pairs of chords from some of those favourite songs!  And you’ll be much closer to finding that musical aCHORD you want. Happy CHORDing!</p>
             <p class="modal-close-button"><button class="button" data-close>Close</button></p>
             <button class="close-button" data-close aria-label="Close Modal" type="button">
                 <span aria-hidden="true">&times;</span>
@@ -205,10 +267,12 @@
         <!-- Footer -->
         <footer>
             <div>
+                <p><a href="https://github.com/michaelpalumbo/achordingly" target="_blank">Contribute</a> | <a href="#about" data-open="about">About</a> | <a href="#howitworks" data-open="howitworks">How It Works</a> | <a href="#contact" data-open="contact">Contact</a></p>
                 <img src="assets/images/cincoswim.png" />
                 &copy; 2022 Cinco Swim Solutions
             </div>
         </footer>    
+
 
         <!-- our JS file(s) BEGIN -->
         <script src="./assets/js/progressions.js"></script>
