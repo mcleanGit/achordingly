@@ -36,7 +36,7 @@
     <body>
         <!-- Navigation -->
         <header>
-            <h1><a href="/">aCHORDingly</a></h1>
+            <img src="./assets/images/aCHORDingly.png" />
 
             <div class="title-bar" data-responsive-toggle="responsive-menu" data-hide-for="medium">
                 <button class="menu-icon" type="button" data-toggle="responsive-menu"></button>
@@ -113,12 +113,18 @@
                 <!-- Column Three -->
                 <div class="large-4 cell">
 
-                    <!-- user account menu -->
+                    <!--
+
                     <div class="userAccount" id="userAccount"></div>
                         <label for="userAccountMenu">Hook Theory Account</label>
                         <select name="userAccountMenu" id="userAccountMenu">
-                        <!-- place username here -->
 
+                        </select>
+                    -->
+
+                        <label for="loadSession">Load a Session</label>
+                        <select name="SavedProgressions" id="HistoryID">
+                            <option disabled selected>--Saved Sessions--</option>
                         </select>
 
                     <!-- Container for Common Chords -->
@@ -133,34 +139,35 @@
                         </div>
                     </div>
 
-                    <!-- Container for Progression -->
+                    <!-- Container for Session -->
                     <div class="card">
                         <div class="card-divider">
-                          <h4>Progressions</h4>
+                          <h4>Save Your Session</h4>
                         </div>
                         <div class="card-section">
-                            <!-- Display Save Progression Window -->
-                            <p><button class="button" data-open="saveYourProgress">Save Your Progress</button></p>
+                            <!-- Display Save Session Window -->
+                            <p><button class="button" data-open="saveYourProgress">Save</button></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-            <!-- Saved Progressions -->
+            <!-- Save Session -->
             <div class="medium reveal" id="saveYourProgress" data-reveal>
-                <h2>Save Your Progress</h2>
-                <input type="text" id="savedName" name="savedName">
+                <h2>Save Your Session</h2>
+                <input type="text" id="savedName" name="savedName" placeholder="Type a name for your session">
                         <button class="button" id="SaveSession">Save Session</button>
-
-                <select name="SavedProgressions" id="HistoryID">
+                <!--
+                        <select name="SavedProgressions" id="HistoryID">
                     <option disabled selected>--Saved Progressions--</option>
                 </select>
+                -->
+                <p class="modal-close-button"><button class="button" data-close>Close</button></p>
                 <button class="close-button" data-close aria-label="Close Modal" type="button">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
         </div>
        
         <!-- login -->
@@ -184,6 +191,18 @@
             <h2>About aCHORDingly</h2>
             <p>aCHORDingly is the brainchild of Cinco Swim Solutions</p>
             <p>As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords.</p>
+            <p>Most of us have had the experience of wanting to learn a few songs.
+                And we soon see that there are chords and chord diagrams that we need to figure out.  It’s easy to get overwhelmed!
+                aCHORDingly focuses on an important subset skill: putting two or three chords together. You select a chord and practice that. 
+            </p>
+            <p>
+                Our app then suggests a probable second chord. You can then practice putting the two chords together to build fluency.
+                And perhaps choose a third chord to add or try a new session.
+                Before long, you will begin to develop the dexterity and aural skills to tackle those songs!
+            </p>
+            <p>aCHORDingly: we know this approach really builds key abilities.</p>
+            <p>See How It Works for more details. 
+                And happy CHORDing!</p>
             <p class="modal-close-button"><button class="button" data-close>Close</button></p>
             <button class="close-button" data-close aria-label="Close Modal" type="button">
                 <span aria-hidden="true">&times;</span>
@@ -194,8 +213,14 @@
         <!-- How It Works Section/Modal -->
         <div class="large reveal" id="howitworks" title="How It Works" data-reveal>
             <h2>How It Works</h2>
-            <p>aCHORDingly is the brainchild of Cinco Swim Solutions</p>
             <p>stipulation in the login that users need to change their hooktheory password manually if they joined via google auth.</p>
+            <p>See About aCHORDingly for a brief introduction to its goal and purpose.</p>
+            <p>aCHORDingly helps you learn how to connect chords, an important skillset in learning songs. When you chose Chord1, our application suggests Chord2, as well as some alternative options. The application also returns a list of other probable chords based on your choices.</p>
+            <p>aCHORDingly uses several public-domain APIs (Application Programming Interfaces), which are databases that store a lot of different information about objects, such as lists of songs, music-theory basics, guitar and piano chords, and sounds.</p>
+            <p>The main API aCHORDingly works with to get you up and chording is hooktheory.com.  Please use click Login in the top bar to open (or sign into) your free hooktheory account. (Please note that users will need to change their hooktheory password manually if they joined via Google authentication.)</p>
+            <p>Once you are Signed In! aCHORDingly will ask you to choose your first Chord from the pulldown menu on the left-hand column of the page. That’s your starting point. Of course you’ll want to get practicing right away and master the fingering and listen to the sound of that chord. Great! So, what next?</p>
+            <p>Once you have chosen your first Chord, aCHORDingly automatically searches the musical database to generate a suggested second chord.  The pulldown menu also allows you to choose some alternatives and provides a list of probable additional chords based on your choices.  Neat!</p>
+            <p>You can save your Session and practice your selections again another time.  And you can continue to develop your vocabulary, dexterity, and aural skills with every session as you expand your knowledge. Before long you’ll be using aCHORDingly to practice pairs of chords from some of those favourite songs!  And you’ll be much closer to finding that musical aCHORD you want. Happy CHORDing!</p>
             <p class="modal-close-button"><button class="button" data-close>Close</button></p>
             <button class="close-button" data-close aria-label="Close Modal" type="button">
                 <span aria-hidden="true">&times;</span>
@@ -242,10 +267,12 @@
         <!-- Footer -->
         <footer>
             <div>
+                <p><a href="https://github.com/michaelpalumbo/achordingly" target="_blank">Contribute</a> | <a href="#about" data-open="about">About</a> | <a href="#howitworks" data-open="howitworks">How It Works</a> | <a href="#contact" data-open="contact">Contact</a></p>
                 <img src="assets/images/cincoswim.png" />
                 &copy; 2022 Cinco Swim Solutions
             </div>
         </footer>    
+
 
         <!-- our JS file(s) BEGIN -->
         <script src="./assets/js/progressions.js"></script>
