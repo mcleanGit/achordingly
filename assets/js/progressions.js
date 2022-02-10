@@ -522,7 +522,7 @@ saveSessionButton.click(function(event){
     var arrayCol3 = [];
     $('#chordListColumn3 li').each(function(){
         arrayCol3.push($(this).text())
-        progression.mostCommonAfter2.chordIDs = $(this).val()
+        progression.mostCommonAfter2.chordIDs.push($(this).val())
     });
     progression.mostCommonAfter2.chords = arrayCol3;
     //console.log('col 3',progression.mostCommonAfter2.chords);
