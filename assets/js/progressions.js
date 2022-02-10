@@ -456,51 +456,113 @@ function diagram(selector, chord){
 
 }
 
-// Save progression
-var saveSessionButton = $("#SaveSession");
-var currentStorage = [null];
+// Save Session History
+var saveSessionButton = $("#SaveSession"); 
+var currentStorage = [null]; // index 0 set to null for handling purposes
 var historySelect = $('#HistoryID');
 
-if(localStorage.getItem('progressionStorage')){
-    populateHistory(); //populate list with progression history
+// checks local storage for previously saved sessions
+if(localStorage.getItem('progressionStorage')){ 
+
+    // assigns array with prior session
+    currentStorage = JSON.parse(localStorage.getItem('progressionStorage')); 
+    //populates list with session history
+    populateHistory(); 
 }
 
 function populateHistory(){
-    currentStorage = JSON.parse(localStorage.getItem('progressionStorage'));
 
-    // Todo include list population for #HistoryID
+    // List population for dropdown with #HistoryID
     for(i=1;i<(currentStorage.length);i++){
         var tempName = currentStorage[i].userSavedName;
-        $('<option/>').val(tempName).html(currentStorage[i].userSavedName).appendTo('#HistoryID'); // changes savedname if added
+        $('<option/>').val(tempName).html(currentStorage[i].userSavedName).appendTo('#HistoryID');
     }
 }
 
+// Saving new session button
 saveSessionButton.click(function(event){
-    progression.userSavedName = $('#savedName').val();
-    console.log('current storage', currentStorage);
+    
+    // assigns users assigned name to saved progression object
+    progression.userSavedName = $('#savedName').val(); 
 
-    currentStorage.push(JSON.parse(JSON.stringify(progression))); // ask if there should be a limit
-    //currentStorage.push(progression);
+    // adds new instance of progression to current session array
+    currentStorage.push(JSON.parse(JSON.stringify(progression))); 
 
+    // adds session to dropdown
     $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
+    
+    // assigns chord 1 with name of suggested chord
+    progression.chord1.name = $('#chord1 option:selected').text();
+    console.log($('#chord1 option:selected').text());
+    // updates localstorage with new array of saved sessions
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
 });
 
+// Selecting item from saved sessions dropdown
 historySelect.change(function(event){
+
+    // obtains which prior session selected, index of dropdown is equal to array as index 0 of both is unselectable/null
     var returnPosition = $('option:selected',this).index();
 
-    console.log(currentStorage[returnPosition].chord1.name,currentStorage[returnPosition].chord2.name);
+    // test to see if selections is returning correct session
+    //console.log(currentStorage[returnPosition].chord1.name,currentStorage[returnPosition].chord2.name);
 
-    //$('#chord1').val(currentStorage[returnPosition].chord1.name).change();
-    //$('#chord1 option:contains('+ currentStorage[returnPosition].chord1.name + ')').prop('selected',true);
-    //$(".chordSetup").trigger('event');
-    var degree = currentStorage[returnPosition].chord1.degree;
+    // assigns progression object the values of saved session
+    progression = JSON.parse(JSON.stringify(currentStorage[returnPosition]))
     
-    console.log(degree, currentStorage[returnPosition].chord1.name);
-    
+    // check if chord exists in base list
+    var valuecheck = progression.chord1.name.replace(/\s+/g,"_");
+
+    if($('#chord1 option[value=' + valuecheck + ']').length > 0){
+        
+        //select chord 1 from base values
+        $('#chord1').val(valuecheck);
+
+    } else {
+        // adds chord if not included in base options
+        $('<option/>').val(valuecheck).html(valuecheck).appendTo('#chord1');
+        $('#chord1').val(valuecheck);
+    }
+
+    // clears chord 2
     clearChord2();
-    nextChord(2, degree, currentStorage[returnPosition].chord1.name);
-    //$('#chord2 option:contains('+ currentStorage[returnPosition].chord2.name + ')').prop('selected',true);
+
+    // remove diagrams from container
+    $( ".chord1DiagramContainer" ).empty();
+    
+    // add/re-add the div diagrams in the DOM
+    $(".chord1DiagramContainer").append(`<div class="chord1fretboard scales_chords_api" chord="${progression.chord1.name}"></div>`)
+    $(".chord1DiagramContainer").append(`<div class="chord1fretboardSound scales_chords_api" chord="${progression.chord1.name}" output="sound"></div>`)
+    $(".chord1DiagramContainer").append(`<div class="chord1piano scales_chords_api" instrument="piano"  chord="${progression.chord1.name}"></div>`)
+    $(".chord1DiagramContainer").append(`<div class="chord1pianoSound scales_chords_api" instrument="piano" chord="${progression.chord1.name}" output="sound"></div>`)
+    
+    // update diagrams
+    diagram(".chord1fretboard", progression.chord1.name)
+    diagram(".chord1piano", progression.chord1.name)
+    diagram(".chord1fretboardSound", progression.chord1.name)
+    diagram(".chord1pianoSound", progression.chord1.name)
+
+    // updates chord 2
+    //nextChord(2, progression.chord1.degree, progression.chord1.name);
+
+    // Select Chord 2 from history    
+    $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
+    $('#chord2').val(progression.chord2.chordID);
+
+    // remove diagrams from container
+    $( ".chord2DiagramContainer" ).empty();
+    // add/re-add the div diagrams in the DOM
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboard scales_chords_api" chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboardSound scales_chords_api" chord="${progression.chord2.name}" output="sound"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2piano scales_chords_api" instrument="piano"  chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2pianoSound scales_chords_api" instrument="piano" chord="${progression.chord2.name}" output="sound"></div>`)
+    // update diagrams
+    diagram(".chord2fretboard", progression.chord2.name)
+    diagram(".chord2piano", progression.chord2.name)
+    diagram(".chord2fretboardSound", progression.chord2.name)
+    diagram(".chord2pianoSound", progression.chord2.name)    
+
+
 })
 
 
