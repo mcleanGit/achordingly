@@ -151,7 +151,6 @@ var progression = {
     scale: [],
     progression: [],
     chord1: {
-        
         name: null, // i.e. C, E, G (pulled from keys.major or keys.minor)
         degree: 1, // hardcoded for now (1 means first note in the scale)
         quality: null, // major or minor
@@ -161,6 +160,7 @@ var progression = {
         name: null,
         degree: null, // the degree is relative to chord1's degree, and is in fact what hooktheory returns
         chordID: null // this is how we communicate chords with hooktheory api
+        
     },
     mostCommonAfter2:{
         chords: []
@@ -567,26 +567,20 @@ historySelect.change(function(event){
 
     console.log(progression.chord1.name, progression.chord2.name)
     // clears chord 2
-    clearChord2();
+    // clearChord2();
 
-    // remove diagrams from container
-    $( ".chord1DiagramContainer" ).empty();
-    
-    // add/re-add the div diagrams in the DOM
-    $(".chord1DiagramContainer").append(`<div class="chord1fretboard scales_chords_api" chord="${progression.chord1.name}"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1fretboardSound scales_chords_api" chord="${progression.chord1.name}" output="sound"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1piano scales_chords_api" instrument="piano"  chord="${progression.chord1.name}"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1pianoSound scales_chords_api" instrument="piano" chord="${progression.chord1.name}" output="sound"></div>`)
-    
     // update diagrams
-    diagram(".chord1fretboard", progression.chord1.name)
-    diagram(".chord1piano", progression.chord1.name)
-    diagram(".chord1fretboardSound", progression.chord1.name)
-    diagram(".chord1pianoSound", progression.chord1.name)
+    chord1Diagrams()
 
     // updates chord 2
     //nextChord(2, progression.chord1.degree, progression.chord1.name);
 
+    // empty the chord2 selectmenu first
+    clearChord2()
+    // rebuild the chord2 selection menu from progressions
+    for(i=0; i < progression.mostCommonAfter2.chords.length;i++){
+        $('<option/>').html(progression.mostCommonAfter2.chords[i]).appendTo('#chord2');
+    }
     // Select Chord 2 from history    
     $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
     $('#chord2').val(progression.chord2.chordID);
