@@ -235,6 +235,8 @@ $( ".chordSetup" ).change(function(event) {
 $( "#chordListColumn3" ).on("click", function(event) {
     degree = event.target.dataset.chordid
     progression.chord1.chordID = degree
+
+    progression.chord1.name = event.target.dataset.chordid
     // needs to reset the chord in column 1
 
     // add chord to menu, make it selected
