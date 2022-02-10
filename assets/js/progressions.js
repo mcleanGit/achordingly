@@ -25,7 +25,7 @@ $("#userAct li").on("click", function(){
             credentials.password = null
             localStorage.removeItem('username')
             localStorage.removeItem('password')
-
+            localStorage.removeItem("hookTheoryBearerToken")
             // Hide Login Menu
             $('.myActSubmenu').hide();
             // refresh the page
