@@ -11,6 +11,10 @@ var credentials = {
 // $(".funNavBar").click(function (event) {
 //     console.log(event.target)
 // })
+// hide on load
+$('.myActSubmenu').hide();
+
+
 $("#userAct li").on("click", function(){
     var choice = $(this).text()
     switch (choice){
@@ -22,8 +26,8 @@ $("#userAct li").on("click", function(){
             localStorage.removeItem('username')
             localStorage.removeItem('password')
 
-            // TODO remove Login menu from DOM, or at least hide it. 
-
+            // Hide Login Menu
+            $('.myActSubmenu').hide();
             // refresh the page
             location.reload();
             return false;
@@ -52,6 +56,7 @@ if(localStorage.getItem('username') === null){
     credentials.username = localStorage.getItem('username')
     credentials.password = localStorage.getItem('password')
     // start ooAuth. false tells it not to hide dialog or store password (both are redundant)
+    $('.myActSubmenu').hide();
     oAuth(false)
 }
 
@@ -97,8 +102,10 @@ function oAuth(dialog){
         if(data.username === credentials.username){
             // it worked
             systemMsg('Signed In!')
+            setTimeout(() => $('.systemMsg').empty(), 5000);
             // hide newUser message once signed in
             $('.newUser').hide()
+            $('.myActSubmenu').show();
             $('<option/>').val(credentials.username).html(credentials.username).appendTo('#userAccountMenu');
             $('<option/>').val('Sign Out').html('Sign Out').appendTo('#userAccountMenu');
             // store bearer token in localStorage (note that this will expire)
@@ -151,7 +158,6 @@ var progression = {
     scale: [],
     progression: [],
     chord1: {
-        
         name: null, // i.e. C, E, G (pulled from keys.major or keys.minor)
         degree: 1, // hardcoded for now (1 means first note in the scale)
         quality: null, // major or minor
@@ -161,49 +167,67 @@ var progression = {
         name: null,
         degree: null, // the degree is relative to chord1's degree, and is in fact what hooktheory returns
         chordID: null // this is how we communicate chords with hooktheory api
+        
     },
     mostCommonAfter2:{
-        chords: []
+        chords: [],
+        chordIDs: []
+        // {name: name, id: id}
     }
 }
+function chord1Diagrams(){
+        // remove diagrams from container
+        $( ".chord1DiagramContainer" ).empty();
+        // add/re-add the div diagrams in the DOM
+        $(".chord1DiagramContainer").append(`<div class="chord1fretboard scales_chords_api" chord="${progression.chord1.name}"></div>`)
+        $(".chord1DiagramContainer").append(`<div class="chord1fretboardSound scales_chords_api" chord="${progression.chord1.name}" output="sound"></div>`)
+        $(".chord1DiagramContainer").append(`<div class="chord1piano scales_chords_api" instrument="piano"  chord="${progression.chord1.name}"></div>`)
+        $(".chord1DiagramContainer").append(`<div class="chord1pianoSound scales_chords_api" instrument="piano" chord="${progression.chord1.name}" output="sound"></div>`)
+        diagram(".chord1fretboard", progression.chord1.name)
+        diagram(".chord1piano", progression.chord1.name)
+        diagram(".chord1fretboardSound", progression.chord1.name)
+        diagram(".chord1pianoSound", progression.chord1.name)
+}
 
+function chord1Details(justChord1){
+    // if sharp/flat chosen, just get the sharp
+    if(progression.chord1.name.includes('/')){
+        progression.chord1.name = progression.chord1.name.split('/')[1]
+    }
+    progression.key = progression.chord1.name.split(' ')[0]
+    progression.chord1.quality = progression.chord1.name.split(' ')[1]
+    // major or minor
+    switch(progression.chord1.quality){
+        
+        case 'major':
+        // case '':
+            progression.keyInfo = Tonal.Key.majorKey(progression.key)
+
+        break;
+        case 'minor':
+        case 'm':
+            progression.keyInfo = Tonal.Key.minorKey(progression.key)
+
+        break;
+    }
+    if(justChord1 === true){
+        // don't update chord 2. justChord1===true means the 3rd column was clicked. 
+    } else {
+        // clear any suggested chord2 content
+        clearChord2()
+        // chord column number here clearChord2()is 2, scale degree, chord name
+        nextChord(2, progression.chord1.degree, progression.chord1.name)
+    }
+
+}
 // given chord choices in the dropdown of either column 1 or column 2:
 $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
             progression.chord1.name = $("#chord1 option:selected").text()
-            // if sharp/flat chosen, just get the sharp
-            if(progression.chord1.name.includes('/')){
-                progression.chord1.name = progression.chord1.name.split('/')[1]
-            }
-            progression.key = progression.chord1.name.split(' ')[0]
-            progression.chord1.quality = progression.chord1.name.split(' ')[1]
-            // major or minor
-            switch(progression.chord1.quality){
-                case 'major':
-                    progression.keyInfo = Tonal.Key.majorKey(progression.key)
-
-                break;
-                case 'minor':
-                    progression.keyInfo = Tonal.Key.minorKey(progression.key)
-
-                break;
-            }
-            // remove diagrams from container
-            $( ".chord1DiagramContainer" ).empty();
-            // add/re-add the div diagrams in the DOM
-            $(".chord1DiagramContainer").append(`<div class="chord1fretboard scales_chords_api" chord="${progression.chord1.name}"></div>`)
-            $(".chord1DiagramContainer").append(`<div class="chord1fretboardSound scales_chords_api" chord="${progression.chord1.name}" output="sound"></div>`)
-            $(".chord1DiagramContainer").append(`<div class="chord1piano scales_chords_api" instrument="piano"  chord="${progression.chord1.name}"></div>`)
-            $(".chord1DiagramContainer").append(`<div class="chord1pianoSound scales_chords_api" instrument="piano" chord="${progression.chord1.name}" output="sound"></div>`)
-            diagram(".chord1fretboard", progression.chord1.name)
-            diagram(".chord1piano", progression.chord1.name)
-            diagram(".chord1fretboardSound", progression.chord1.name)
-            diagram(".chord1pianoSound", progression.chord1.name)
-            // clear any suggested chord2 content
-            clearChord2()
-            // chord column number here is 2, scale degree, chord name
-            nextChord(2, progression.chord1.degree, progression.chord1.name)
+            progression.chord1.chordID = $("#chord1 option:selected").val()
+            chord1Details()
+            chord1Diagrams()
         break
         case 'chord2':
             progression.chord2.name = $("#chord2 option:selected").text()
@@ -211,8 +235,8 @@ $( ".chordSetup" ).change(function(event) {
             // $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
 
             // now grab suggested chords for column 3 based on selected chord 2
-            chord = Tonal.RomanNumeral.get(num);
-            degree = chord.step + 1
+            // chord = Tonal.RomanNumeral.get(num);
+            // degree = chord.step + 1
             
             // remove diagrams from container
             $( ".chord2DiagramContainer" ).empty();
@@ -227,40 +251,56 @@ $( ".chordSetup" ).change(function(event) {
             diagram(".chord2fretboardSound", progression.chord2.name)
             diagram(".chord2pianoSound", progression.chord2.name)
 
-            nextChord(3, degree, name)
+            nextChord(3, progression.chord2.chordID, progression.chord2.name)
         break
     }
 })
 
 $( "#chordListColumn3" ).on("click", function(event) {
-    degree = event.target.dataset.chordid
-    progression.chord1.chordID = degree
+    // get values of chord 2 drop down first
+    progression.chord1.name = $("#chord2 option:selected").text()
+    progression.chord1.chordID = $("#chord2 option:selected").val()
+    // send it to chord1, with additional var that tells chord1 not to fetch chord2. 
+    // chord2Details()
+    chord1Diagrams()
+    // with true, it skips calling nextChord() on chord 2
+    chord1Details(true)
+    // set chord 1 dropdown item
+    $('<option/>').val(progression.chord1.chordID).html(progression.chord1.name).appendTo('#chord1');
+    // make it selected
+    $('#chord1').val(progression.chord1.chordID);
+
+    progression.chord2.chordID = event.target.dataset.chordid
+
+    progression.chord2.name = event.target.dataset.chord
+
+    // to do: figure out how to get the chord quality from chord1.name, then add it to chord1.quality here. 
     // needs to reset the chord in column 1
 
     // add chord to menu, make it selected
-    $('<option/>').val(degree).html(event.target.dataset.chord).appendTo('#chord1');
+    $('<option/>').val(progression.chord2.chordID).html(event.target.dataset.chord).appendTo('#chord2');
     // make it selected
-    $('#chord1').val(degree);
+    $('#chord2').val(progression.chord2.chordID);
 
     // remove diagrams from container
-    $( ".chord1DiagramContainer" ).empty();
+    $( ".chord2DiagramContainer" ).empty();
     // add/re-add the div diagrams in the DOM
-    $(".chord1DiagramContainer").append(`<div class="chord1fretboard scales_chords_api" chord="${progression.chord1.name}"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1fretboardSound scales_chords_api" chord="${progression.chord1.name}" output="sound"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1piano scales_chords_api" instrument="piano"  chord="${progression.chord1.name}"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1pianoSound scales_chords_api" instrument="piano" chord="${progression.chord1.name}" output="sound"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboard scales_chords_api" chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2fretboardSound scales_chords_api" chord="${progression.chord2.name}" output="sound"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2piano scales_chords_api" instrument="piano"  chord="${progression.chord2.name}"></div>`)
+    $(".chord2DiagramContainer").append(`<div class="chord2pianoSound scales_chords_api" instrument="piano" chord="${progression.chord2.name}" output="sound"></div>`)
     // update diagrams
-    diagram(".chord1fretboard", event.target.dataset.chord)
-    diagram(".chord1piano", event.target.dataset.chord)
-    diagram(".chord1fretboardSound", event.target.dataset.chord)
-    diagram(".chord1pianoSound", event.target.dataset.chord)
+    diagram(".chord2fretboard", event.target.dataset.chord)
+    diagram(".chord2piano", event.target.dataset.chord)
+    diagram(".chord2fretboardSound", event.target.dataset.chord)
+    diagram(".chord2pianoSound", event.target.dataset.chord)
 
-    nextChord(2, degree, event.target.dataset.chord)
+    nextChord(3, progression.chord2.chordID, event.target.dataset.chord)
 
 })
 function nextChord(chordNumber, degree, name){
-    
     systemMsg('Accessing chord database, please wait...')
+    setTimeout(() => $('.systemMsg').empty(), 5000);
     var bearerToken = localStorage.getItem("hookTheoryBearerToken")
     
     // var url = 'https://api.hooktheory.com/v1/trends/nodes?cp=' + childPath
@@ -278,7 +318,6 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
-        console.log(data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
@@ -308,7 +347,6 @@ function suggestChord(chordNumber, name, probabilities){
                     } 
                 // get number from numeral
                 chord = Tonal.RomanNumeral.get(num);
-                
 
                 // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
                 var index;
@@ -358,17 +396,18 @@ function suggestChord(chordNumber, name, probabilities){
                 }
                 // prevent chord being added twice (this is a quick fix)
                 if(theseChords.includes(chordName)){
-                    console.log('filtered', chordName)
+
                     // add another index to search through the array of returned chords
                     j++
                 } else {
                     // add chord names to the chord2 dropdown menu
-                    $('<option/>').val(num).html(chordName).appendTo('#chord2');
+                    $('<option/>').val(probabilities[i].chord_ID).html(chordName).appendTo('#chord2');
                     theseChords.push(chordName)
                 }
 
             }
             systemMsg('Chord suggestions returned!')
+            setTimeout(() => $('.systemMsg').empty(), 5000);
 
             
         break
@@ -404,7 +443,6 @@ function suggestChord(chordNumber, name, probabilities){
                     // get chord name given scale index and key chord array
                     chordName = progression.keyInfo.natural.chords[step]
                 }
-                
                 if(chordName.includes('maj7')){
                     // remove maj7, its confusing to guitarists and redundant
                     chordName = chordName.replace('maj7', '')
@@ -415,7 +453,7 @@ function suggestChord(chordNumber, name, probabilities){
                 
                 // prevent chord being added twice (this is a quick fix)
                 if(theseChords.includes(chordName)){
-                    console.log('filtered', chordName)
+
                     // add another index to search through the array of returned chords
                     j++
                 } else {
@@ -424,6 +462,8 @@ function suggestChord(chordNumber, name, probabilities){
                     theseChords.push(chordName)
                 }
             }
+            systemMsg('Chord suggestions returned!')
+            setTimeout(() => $('.systemMsg').empty(), 5000);
         break;
     }
 }
@@ -447,7 +487,7 @@ function systemMsg(msg){
 
 // diagrams
 function diagram(selector, chord){
-    console.log(selector)
+
     var diagram = document.querySelector(selector)
     diagram.setAttribute('chord', chord)
     scales_chords_api_onload()
@@ -483,15 +523,26 @@ saveSessionButton.click(function(event){
     // assigns users assigned name to saved progression object
     progression.userSavedName = $('#savedName').val(); 
 
+    // array of suggestions from column 3
+    var arrayCol3 = [];
+    $('#chordListColumn3 li').each(function(){
+        arrayCol3.push($(this).text())
+        progression.mostCommonAfter2.chordIDs.push($(this).val())
+    });
+    progression.mostCommonAfter2.chords = arrayCol3;
+    //console.log('col 3',progression.mostCommonAfter2.chords);
+
+    // assigns chord 1 with name of suggested chord
+    progression.chord1.name = $('#chord1 option:selected').text();
+    //console.log($('#chord1 option:selected').text());
+
     // adds new instance of progression to current session array
     currentStorage.push(JSON.parse(JSON.stringify(progression))); 
 
     // adds session to dropdown
     $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
+    $('#HistoryID').val(progression.userSavedName);
     
-    // assigns chord 1 with name of suggested chord
-    progression.chord1.name = $('#chord1 option:selected').text();
-    console.log($('#chord1 option:selected').text());
     // updates localstorage with new array of saved sessions
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
 });
@@ -508,6 +559,7 @@ historySelect.change(function(event){
     // assigns progression object the values of saved session
     progression = JSON.parse(JSON.stringify(currentStorage[returnPosition]))
     
+
     // check if chord exists in base list
     var valuecheck = progression.chord1.name.replace(/\s+/g,"_");
 
@@ -521,31 +573,27 @@ historySelect.change(function(event){
         $('<option/>').val(valuecheck).html(valuecheck).appendTo('#chord1');
         $('#chord1').val(valuecheck);
     }
-
-    // clears chord 2
-    clearChord2();
-
-    // remove diagrams from container
-    $( ".chord1DiagramContainer" ).empty();
-    
-    // add/re-add the div diagrams in the DOM
-    $(".chord1DiagramContainer").append(`<div class="chord1fretboard scales_chords_api" chord="${progression.chord1.name}"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1fretboardSound scales_chords_api" chord="${progression.chord1.name}" output="sound"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1piano scales_chords_api" instrument="piano"  chord="${progression.chord1.name}"></div>`)
-    $(".chord1DiagramContainer").append(`<div class="chord1pianoSound scales_chords_api" instrument="piano" chord="${progression.chord1.name}" output="sound"></div>`)
-    
     // update diagrams
-    diagram(".chord1fretboard", progression.chord1.name)
-    diagram(".chord1piano", progression.chord1.name)
-    diagram(".chord1fretboardSound", progression.chord1.name)
-    diagram(".chord1pianoSound", progression.chord1.name)
+    chord1Diagrams()
 
     // updates chord 2
     //nextChord(2, progression.chord1.degree, progression.chord1.name);
 
-    // Select Chord 2 from history    
-    $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
-    $('#chord2').val(progression.chord2.chordID);
+    // empty the chord2 selectmenu first
+    clearChord2()
+    // rebuild the chord2 selection menu from progressions
+    var selectedIndex
+    for(i=0; i < progression.mostCommonAfter2.chordIDs.length;i++){
+        if(progression.chord2.name === progression.mostCommonAfter2.chords[i]){
+            selectedIndex = i
+        }
+        $('<option/>').val(progression.mostCommonAfter2.chordIDs[i]).html(progression.mostCommonAfter2.chords[i]).appendTo('#chord2');
+    }
+    
+    // // Select Chord 2 from history    
+    // $('<option/>').val(progression.chord2.chordIDs[count]).html(progression.chord2.name).appendTo('#chord2');
+    $('#chord2').prop('selectedIndex', selectedIndex)
+    // $('#chord2').val(progression.chord2.name);
 
     // remove diagrams from container
     $( ".chord2DiagramContainer" ).empty();
@@ -560,7 +608,13 @@ historySelect.change(function(event){
     diagram(".chord2fretboardSound", progression.chord2.name)
     diagram(".chord2pianoSound", progression.chord2.name)    
 
-
+    // column 3 suggestions
+    //nextChord(3,progression.chord2.degree,progression.chord2.name);
+    $('.chordListColumn3').empty();
+    for(i=0; i < progression.mostCommonAfter2.chords.length;i++){
+    // $('<li/>').html(progression.mostCommonAfter2.chords[i]).appendTo('#chordListColumn3');
+        $('<li/>').val(progression.mostCommonAfter2.chordIDs[i]).html(`<a data-chord=${progression.mostCommonAfter2.chords[i]} data-chordID=${progression.mostCommonAfter2.chordIDs[i]}>${progression.mostCommonAfter2.chords[i]}</a>`).appendTo('#chordListColumn3');
+    }
 })
 
 
