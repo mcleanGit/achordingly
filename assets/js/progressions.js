@@ -11,6 +11,10 @@ var credentials = {
 // $(".funNavBar").click(function (event) {
 //     console.log(event.target)
 // })
+// hide on load
+$('.myActSubmenu').hide();
+
+
 $("#userAct li").on("click", function(){
     var choice = $(this).text()
     switch (choice){
@@ -22,8 +26,8 @@ $("#userAct li").on("click", function(){
             localStorage.removeItem('username')
             localStorage.removeItem('password')
 
-            // TODO remove Login menu from DOM, or at least hide it. 
-
+            // Hide Login Menu
+            $('.myActSubmenu').hide();
             // refresh the page
             location.reload();
             return false;
@@ -52,6 +56,7 @@ if(localStorage.getItem('username') === null){
     credentials.username = localStorage.getItem('username')
     credentials.password = localStorage.getItem('password')
     // start ooAuth. false tells it not to hide dialog or store password (both are redundant)
+    $('.myActSubmenu').hide();
     oAuth(false)
 }
 
@@ -99,6 +104,7 @@ function oAuth(dialog){
             systemMsg('Signed In!')
             // hide newUser message once signed in
             $('.newUser').hide()
+            $('.myActSubmenu').show();
             $('<option/>').val(credentials.username).html(credentials.username).appendTo('#userAccountMenu');
             $('<option/>').val('Sign Out').html('Sign Out').appendTo('#userAccountMenu');
             // store bearer token in localStorage (note that this will expire)
