@@ -224,9 +224,13 @@ $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
             progression.chord1.name = $("#chord1 option:selected").text()
-            console.log('chord1', progression.chord1.name)
+            
             progression.chord1.chordID = $("#chord1 option:selected").val()
-
+            if(progression.chord1.chordID.includes('_')){
+                progression.chord1.chordID = 1
+            } else {
+                
+            }
             if(progression.chord1.name === 'Cb'){
                 progression.chord1.name = 'B'
             }if(progression.chord1.name === 'Cbm'){
@@ -277,10 +281,11 @@ $( ".chordSetup" ).change(function(event) {
 })
 
 $( "#chordListColumn3" ).on("click", function(event) {
+    clearChord2()
     // get values of chord 2 drop down first
     progression.chord1.name = $("#chord2 option:selected").text()
     progression.chord1.chordID = $("#chord2 option:selected").val()
-
+    console.log('chordListColumn3', progression.chord1.chordID)
 
     if(progression.chord1.name === 'Cb'){
         progression.chord1.name = 'B'
@@ -337,6 +342,7 @@ $( "#chordListColumn3" ).on("click", function(event) {
     diagram(".chord2fretboardSound", event.target.dataset.chord)
     diagram(".chord2pianoSound", event.target.dataset.chord)
 
+    
     nextChord(3, progression.chord2.chordID, event.target.dataset.chord)
 
 })
@@ -588,6 +594,7 @@ saveSessionButton.click(function(event){
 
     // array of suggestions from column 3
     var arrayCol3 = [];
+    progression.mostCommonAfter2.chordIDs.length = 0
     $('#chordListColumn3 li').each(function(){
         arrayCol3.push($(this).text())
         progression.mostCommonAfter2.chordIDs.push($(this).val())
@@ -664,6 +671,8 @@ historySelect.change(function(event){
 
     // empty the chord2 selectmenu first
     clearChord2()
+
+    nextChord(3, progression.chord2.chordID, progression.chord2.name)
     // rebuild the chord2 selection menu from progressions
     var selectedIndex
     for(i=0; i < progression.mostCommonAfter2.chordIDs.length;i++){
@@ -673,10 +682,10 @@ historySelect.change(function(event){
         $('<option/>').val(progression.mostCommonAfter2.chordIDs[i]).html(progression.mostCommonAfter2.chords[i]).appendTo('#chord2');
     }
     
-    // // Select Chord 2 from history    
-    // $('<option/>').val(progression.chord2.chordIDs[count]).html(progression.chord2.name).appendTo('#chord2');
-    $('#chord2').prop('selectedIndex', selectedIndex)
-    // $('#chord2').val(progression.chord2.name);
+    // // // Select Chord 2 from history    
+    $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
+    // $('#chord2').prop('selectedIndex', selectedIndex)
+    $('#chord2').val(progression.chord2.chordID);
 
     // remove diagrams from container
     $( ".chord2DiagramContainer" ).empty();
