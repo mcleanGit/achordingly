@@ -190,7 +190,6 @@ function chord1Details(justChord1){
     }
     progression.key = progression.chord1.name.split(' ')[0]
     progression.chord1.quality = progression.chord1.name.split(' ')[1]
-    console.log('quality', progression.chord1.quality)
     // major or minor
     switch(progression.chord1.quality){
         
@@ -568,11 +567,6 @@ historySelect.change(function(event){
         $('<option/>').val(valuecheck).html(valuecheck).appendTo('#chord1');
         $('#chord1').val(valuecheck);
     }
-
-    console.log(progression.chord1.name, progression.chord2.name)
-    // clears chord 2
-    // clearChord2();
-
     // update diagrams
     chord1Diagrams()
 
@@ -582,16 +576,18 @@ historySelect.change(function(event){
     // empty the chord2 selectmenu first
     clearChord2()
     // rebuild the chord2 selection menu from progressions
-    var count = 0
+    var selectedIndex
     for(i=0; i < progression.mostCommonAfter2.chordIDs.length;i++){
-        count++
-        console.log(progression.mostCommonAfter2.chordIDs[i])
+        if(progression.chord2.name === progression.mostCommonAfter2.chords[i]){
+            selectedIndex = i
+        }
         $('<option/>').val(progression.mostCommonAfter2.chordIDs[i]).html(progression.mostCommonAfter2.chords[i]).appendTo('#chord2');
     }
     
     // // Select Chord 2 from history    
     // $('<option/>').val(progression.chord2.chordIDs[count]).html(progression.chord2.name).appendTo('#chord2');
-    $('#chord2').val(progression.chord2.chordID);
+    $('#chord2').prop('selectedIndex', selectedIndex)
+    // $('#chord2').val(progression.chord2.name);
 
     // remove diagrams from container
     $( ".chord2DiagramContainer" ).empty();
