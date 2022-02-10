@@ -166,7 +166,7 @@ var progression = {
         chords: []
     }
 }
-function chord2Diagrams(){
+function chord1Diagrams(){
         // remove diagrams from container
         $( ".chord1DiagramContainer" ).empty();
         // add/re-add the div diagrams in the DOM
@@ -180,7 +180,7 @@ function chord2Diagrams(){
         diagram(".chord1pianoSound", progression.chord1.name)
 }
 
-function chord2Details(){
+function chord1Details(justChord1){
     console.log(progression.chord1.name)
     // if sharp/flat chosen, just get the sharp
     if(progression.chord1.name.includes('/')){
@@ -188,8 +188,10 @@ function chord2Details(){
     }
     progression.key = progression.chord1.name.split(' ')[0]
     progression.chord1.quality = progression.chord1.name.split(' ')[1]
+    console.log('quality', progression.chord1.quality)
     // major or minor
     switch(progression.chord1.quality){
+        
         case 'major':
         // case '':
             console.log(progression.chord1.quality)
@@ -202,19 +204,24 @@ function chord2Details(){
 
         break;
     }
+    if(justChord1 === true){
+        // don't update chord 2. justChord1===true means the 3rd column was clicked. 
+    } else {
+        // clear any suggested chord2 content
+        clearChord2()
+        // chord column number here is 2, scale degree, chord name
+        nextChord(2, progression.chord1.degree, progression.chord1.name)
+    }
 
-    // clear any suggested chord2 content
-    clearChord2()
-    // chord column number here is 2, scale degree, chord name
-    nextChord(2, progression.chord1.degree, progression.chord1.name)
 }
 // given chord choices in the dropdown of either column 1 or column 2:
 $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
             progression.chord1.name = $("#chord1 option:selected").text()
-            chord2Details()
-            chord2Diagrams()
+            progression.chord1.chordID = $("#chord1 option:selected").val()
+            chord1Details()
+            chord1Diagrams()
         break
         case 'chord2':
             progression.chord2.name = $("#chord2 option:selected").text()
@@ -244,8 +251,20 @@ $( ".chordSetup" ).change(function(event) {
 })
 
 $( "#chordListColumn3" ).on("click", function(event) {
-    degree = event.target.dataset.chordid
-    progression.chord2.chordID = degree
+    // get values of chord 2 drop down first
+    progression.chord1.name = $("#chord2 option:selected").text()
+    progression.chord1.chordID = $("#chord2 option:selected").val()
+    // send it to chord1, with additional var that tells chord1 not to fetch chord2. 
+    // chord2Details()
+    chord1Diagrams()
+    // with true, it skips calling nextChord() on chord 2
+    chord1Details(true)
+    // set chord 1 dropdown item
+    $('<option/>').val(progression.chord1.chordID).html(progression.chord1.name).appendTo('#chord1');
+    // make it selected
+    $('#chord1').val(progression.chord1.chordID);
+
+    progression.chord2.chordID = event.target.dataset.chordid
 
     progression.chord2.name = event.target.dataset.chord
 
@@ -253,9 +272,9 @@ $( "#chordListColumn3" ).on("click", function(event) {
     // needs to reset the chord in column 1
 
     // add chord to menu, make it selected
-    $('<option/>').val(degree).html(event.target.dataset.chord).appendTo('#chord2');
+    $('<option/>').val(progression.chord2.chordID).html(event.target.dataset.chord).appendTo('#chord2');
     // make it selected
-    $('#chord2').val(degree);
+    $('#chord2').val(progression.chord2.chordID);
 
     // remove diagrams from container
     $( ".chord2DiagramContainer" ).empty();
@@ -270,7 +289,7 @@ $( "#chordListColumn3" ).on("click", function(event) {
     diagram(".chord2fretboardSound", event.target.dataset.chord)
     diagram(".chord2pianoSound", event.target.dataset.chord)
 
-    nextChord(3, degree, event.target.dataset.chord)
+    nextChord(3, progression.chord2.chordID, event.target.dataset.chord)
 
 })
 function nextChord(chordNumber, degree, name){
@@ -418,7 +437,6 @@ function suggestChord(chordNumber, name, probabilities){
                     // get chord name given scale index and key chord array
                     chordName = progression.keyInfo.natural.chords[step]
                 }
-                console.log(chordName)
                 if(chordName.includes('maj7')){
                     // remove maj7, its confusing to guitarists and redundant
                     chordName = chordName.replace('maj7', '')
