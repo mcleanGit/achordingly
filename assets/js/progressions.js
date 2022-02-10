@@ -343,7 +343,7 @@ function suggestChord(chordNumber, name, probabilities){
                     } 
                 // get number from numeral
                 chord = Tonal.RomanNumeral.get(num);
-                
+                console.log(chord)
 
                 // find the scale index of the number. caveat: tonaljs has different objects for natural and harmonic/medolic minor keys, so get the natural?
                 var index;
