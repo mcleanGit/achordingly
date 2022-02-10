@@ -536,6 +536,7 @@ saveSessionButton.click(function(event){
 
     // adds session to dropdown
     $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
+    $('#HistoryID').val(progression.userSavedName);
     
     // updates localstorage with new array of saved sessions
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
