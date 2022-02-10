@@ -235,10 +235,6 @@ $( ".chordSetup" ).change(function(event) {
 $( "#chordListColumn3" ).on("click", function(event) {
     degree = event.target.dataset.chordid
     progression.chord1.chordID = degree
-
-    progression.chord1.name = event.target.dataset.chord
-
-    // to do: figure out how to get the chord quality from chord1.name, then add it to chord1.quality here. 
     // needs to reset the chord in column 1
 
     // add chord to menu, make it selected
@@ -282,6 +278,7 @@ function nextChord(chordNumber, degree, name){
 
     }).then(function (data) {
 
+        console.log(data)
         suggestChord(chordNumber, name, data)
     }).catch(function (err) {
 
@@ -407,11 +404,11 @@ function suggestChord(chordNumber, name, probabilities){
                     // get chord name given scale index and key chord array
                     chordName = progression.keyInfo.natural.chords[step]
                 }
-                console.log(chordName)
+                
                 if(chordName.includes('maj7')){
                     // remove maj7, its confusing to guitarists and redundant
                     chordName = chordName.replace('maj7', '')
-                } if(chordName.includes('m7')){
+                } else if(chordName.includes('m7')){
                     // remove maj7, its confusing to guitarists and redundant
                     chordName = chordName.replace('m7', 'm')
                 }
@@ -450,36 +447,42 @@ function systemMsg(msg){
 
 // diagrams
 function diagram(selector, chord){
+    console.log(selector)
     var diagram = document.querySelector(selector)
     diagram.setAttribute('chord', chord)
     scales_chords_api_onload()
 
 }
 
-// Save progression
-var saveSessionButton = $("#SaveSession");
-var currentStorage = [null];
+// Save Session History
+var saveSessionButton = $("#SaveSession"); 
+var currentStorage = [null]; // index 0 set to null for handling purposes
 var historySelect = $('#HistoryID');
 
-if(localStorage.getItem('progressionStorage')){
-    populateHistory(); //populate list with progression history
+// checks local storage for previously saved sessions
+if(localStorage.getItem('progressionStorage')){ 
+
+    // assigns array with prior session
+    currentStorage = JSON.parse(localStorage.getItem('progressionStorage')); 
+    //populates list with session history
+    populateHistory(); 
 }
 
 function populateHistory(){
-    currentStorage = JSON.parse(localStorage.getItem('progressionStorage'));
 
-    // Todo include list population for #HistoryID
+    // List population for dropdown with #HistoryID
     for(i=1;i<(currentStorage.length);i++){
         var tempName = currentStorage[i].userSavedName;
-        $('<option/>').val(tempName).html(currentStorage[i].userSavedName).appendTo('#HistoryID'); // changes savedname if added
+        $('<option/>').val(tempName).html(currentStorage[i].userSavedName).appendTo('#HistoryID');
     }
 }
 
+// Saving new session button
 saveSessionButton.click(function(event){
-    progression.userSavedName = $('#savedName').val();
-    //console.log('current storage', currentStorage);
+    
+    // assigns users assigned name to saved progression object
+    progression.userSavedName = $('#savedName').val(); 
 
-<<<<<<< HEAD
     // array of suggestions from column 3
     var arrayCol3 = [];
     $('#chordListColumn3 li').each(function(){
@@ -494,34 +497,42 @@ saveSessionButton.click(function(event){
 
     // adds new instance of progression to current session array
     currentStorage.push(JSON.parse(JSON.stringify(progression))); 
-=======
-    currentStorage.push(JSON.parse(JSON.stringify(progression))); // ask if there should be a limit
-    //currentStorage.push(progression);
->>>>>>> b66238f8dbf3de9362bd964aae04f57fb68efd03
 
+    // adds session to dropdown
     $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
-<<<<<<< HEAD
     
     // updates localstorage with new array of saved sessions
-=======
->>>>>>> b66238f8dbf3de9362bd964aae04f57fb68efd03
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
 });
 
+// Selecting item from saved sessions dropdown
 historySelect.change(function(event){
+
+    // obtains which prior session selected, index of dropdown is equal to array as index 0 of both is unselectable/null
     var returnPosition = $('option:selected',this).index();
 
+    // test to see if selections is returning correct session
     //console.log(currentStorage[returnPosition].chord1.name,currentStorage[returnPosition].chord2.name);
 
-    //$('#chord1').val(currentStorage[returnPosition].chord1.name).change();
-    //$('#chord1 option:contains('+ currentStorage[returnPosition].chord1.name + ')').prop('selected',true);
-    //$(".chordSetup").trigger('event');
-    var degree = currentStorage[returnPosition].chord1.degree;
+    // assigns progression object the values of saved session
+    progression = JSON.parse(JSON.stringify(currentStorage[returnPosition]))
     
-    //console.log(degree, currentStorage[returnPosition].chord1.name);
-    
+    // check if chord exists in base list
+    var valuecheck = progression.chord1.name.replace(/\s+/g,"_");
+
+    if($('#chord1 option[value=' + valuecheck + ']').length > 0){
+        
+        //select chord 1 from base values
+        $('#chord1').val(valuecheck);
+
+    } else {
+        // adds chord if not included in base options
+        $('<option/>').val(valuecheck).html(valuecheck).appendTo('#chord1');
+        $('#chord1').val(valuecheck);
+    }
+
+    // clears chord 2
     clearChord2();
-<<<<<<< HEAD
 
     // remove diagrams from container
     $( ".chord1DiagramContainer" ).empty();
@@ -566,10 +577,6 @@ historySelect.change(function(event){
     }
 
 
-=======
-    nextChord(2, degree, currentStorage[returnPosition].chord1.name);
-    //$('#chord2 option:contains('+ currentStorage[returnPosition].chord2.name + ')').prop('selected',true);
->>>>>>> b66238f8dbf3de9362bd964aae04f57fb68efd03
 })
 
 
@@ -586,8 +593,8 @@ function ContactFunction(){
      
     emailjs.send('service_eqwugke', 'template_f09vmub', templateParams)
         .then(function(response) {
-           //console.log('SUCCESS!', response.status, response.text);
+           console.log('SUCCESS!', response.status, response.text);
         }, function(error) {
-           //console.log('FAILED...', error);
+           console.log('FAILED...', error);
         });
 }
