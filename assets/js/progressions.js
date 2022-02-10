@@ -85,7 +85,6 @@ function oAuth(dialog){
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-            
         }
     })
     .then(function (resp) {
@@ -225,15 +224,36 @@ $( ".chordSetup" ).change(function(event) {
     switch(event.target.name){
         case 'chord1':
             progression.chord1.name = $("#chord1 option:selected").text()
+            console.log('chord1', progression.chord1.name)
             progression.chord1.chordID = $("#chord1 option:selected").val()
+
+            if(progression.chord1.name === 'Cb'){
+                progression.chord1.name = 'B'
+            }if(progression.chord1.name === 'Cbm'){
+                progression.chord1.name = 'Bm'
+            }if(progression.chord1.name === 'Fb'){
+                progression.chord1.name = 'E'
+            }if(progression.chord1.name === 'Fbm'){
+                progression.chord1.name = 'Em'
+            }
             chord1Details()
             chord1Diagrams()
         break
         case 'chord2':
             progression.chord2.name = $("#chord2 option:selected").text()
+            if(progression.chord2.name === 'Cb'){
+                progression.chord2.name = 'B'
+            }if(progression.chord2.name === 'Cbm'){
+                progression.chord2.name = 'Bm'
+            }if(progression.chord2.name === 'Fb'){
+                progression.chord2.name = 'E'
+            }if(progression.chord2.name === 'Fbm'){
+                progression.chord2.name = 'Em'
+            }
+
             progression.chord2.chordID = $("#chord2 option:selected").val()
             // $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
-
+            console.log('chord2', progression.chord2.name)
             // now grab suggested chords for column 3 based on selected chord 2
             // chord = Tonal.RomanNumeral.get(num);
             // degree = chord.step + 1
@@ -260,6 +280,17 @@ $( "#chordListColumn3" ).on("click", function(event) {
     // get values of chord 2 drop down first
     progression.chord1.name = $("#chord2 option:selected").text()
     progression.chord1.chordID = $("#chord2 option:selected").val()
+
+
+    if(progression.chord1.name === 'Cb'){
+        progression.chord1.name = 'B'
+    }if(progression.chord1.name === 'Cbm'){
+        progression.chord1.name = 'Bm'
+    }if(progression.chord1.name === 'Fb'){
+        progression.chord1.name = 'E'
+    }if(progression.chord1.name === 'Fbm'){
+        progression.chord1.name = 'Em'
+    }
     // send it to chord1, with additional var that tells chord1 not to fetch chord2. 
     // chord2Details()
     chord1Diagrams()
@@ -274,11 +305,22 @@ $( "#chordListColumn3" ).on("click", function(event) {
 
     progression.chord2.name = event.target.dataset.chord
 
+    progression.chord2.name = $("#chord2 option:selected").text()
+    
+    if(progression.chord2.name === 'Cb'){
+        progression.chord2.name = 'B'
+    }if(progression.chord2.name === 'Cbm'){
+        progression.chord2.name = 'Bm'
+    }if(progression.chord2.name === 'Fb'){
+        progression.chord2.name = 'E'
+    }if(progression.chord2.name === 'Fbm'){
+        progression.chord2.name = 'Em'
+    }
     // to do: figure out how to get the chord quality from chord1.name, then add it to chord1.quality here. 
     // needs to reset the chord in column 1
 
     // add chord to menu, make it selected
-    $('<option/>').val(progression.chord2.chordID).html(event.target.dataset.chord).appendTo('#chord2');
+    $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
     // make it selected
     $('#chord2').val(progression.chord2.chordID);
 
@@ -368,7 +410,7 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = chordName.replace('m7', 'm')
                 }
 
-                
+ 
                 // here is where we need to fire chord selection2 so that list 3 populates. 
                 if(i===0){
                     progression.chord2.name = chordName
@@ -394,6 +436,17 @@ function suggestChord(chordNumber, name, probabilities){
                     diagram(".chord2pianoSound", progression.chord2.name)
                     nextChord(3, degree, name)
                 }
+
+                // hack 
+                if(chordName === 'Cb'){
+                    chordName = 'B'
+                }if(chordName === 'Cbm'){
+                    chordName = 'Bm'
+                }if(chordName === 'Fb'){
+                    chordName = 'E'
+                }if(chordName === 'Fbm'){
+                    chordName = 'Em'
+                }
                 // prevent chord being added twice (this is a quick fix)
                 if(theseChords.includes(chordName)){
 
@@ -401,6 +454,7 @@ function suggestChord(chordNumber, name, probabilities){
                     j++
                 } else {
                     // add chord names to the chord2 dropdown menu
+                    chordName
                     $('<option/>').val(probabilities[i].chord_ID).html(chordName).appendTo('#chord2');
                     theseChords.push(chordName)
                 }
@@ -451,6 +505,15 @@ function suggestChord(chordNumber, name, probabilities){
                     chordName = chordName.replace('m7', 'm')
                 }
                 
+                if(chordName === 'Cb'){
+                    chordName = 'B'
+                }if(chordName === 'Cbm'){
+                    chordName = 'Bm'
+                }if(chordName === 'Fb'){
+                    chordName = 'E'
+                }if(chordName === 'Fbm'){
+                    chordName = 'Em'
+                }
                 // prevent chord being added twice (this is a quick fix)
                 if(theseChords.includes(chordName)){
 
@@ -534,6 +597,26 @@ saveSessionButton.click(function(event){
 
     // assigns chord 1 with name of suggested chord
     progression.chord1.name = $('#chord1 option:selected').text();
+    if(progression.chord1.name === 'Cb'){
+        progression.chord1.name = 'B'
+    }if(progression.chord1.name === 'Cbm'){
+        progression.chord1.name = 'Bm'
+    }if(progression.chord1.name === 'Fb'){
+        progression.chord1.name = 'E'
+    }if(progression.chord1.name === 'Fbm'){
+        progression.chord1.name = 'Em'
+    }
+
+    progression.chord2.name = $("#chord2 option:selected").text()
+    if(progression.chord2.name === 'Cb'){
+        progression.chord2.name = 'B'
+    }if(progression.chord2.name === 'Cbm'){
+        progression.chord2.name = 'Bm'
+    }if(progression.chord2.name === 'Fb'){
+        progression.chord2.name = 'E'
+    }if(progression.chord2.name === 'Fbm'){
+        progression.chord2.name = 'Em'
+    }
     //console.log($('#chord1 option:selected').text());
 
     // adds new instance of progression to current session array
