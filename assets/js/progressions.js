@@ -102,6 +102,7 @@ function oAuth(dialog){
         if(data.username === credentials.username){
             // it worked
             systemMsg('Signed In!')
+            setTimeout(() => $('.systemMsg').empty(), 5000);
             // hide newUser message once signed in
             $('.newUser').hide()
             $('.myActSubmenu').show();
@@ -299,6 +300,7 @@ $( "#chordListColumn3" ).on("click", function(event) {
 })
 function nextChord(chordNumber, degree, name){
     systemMsg('Accessing chord database, please wait...')
+    setTimeout(() => $('.systemMsg').empty(), 5000);
     var bearerToken = localStorage.getItem("hookTheoryBearerToken")
     
     // var url = 'https://api.hooktheory.com/v1/trends/nodes?cp=' + childPath
@@ -405,6 +407,7 @@ function suggestChord(chordNumber, name, probabilities){
 
             }
             systemMsg('Chord suggestions returned!')
+            setTimeout(() => $('.systemMsg').empty(), 5000);
 
             
         break
@@ -459,6 +462,8 @@ function suggestChord(chordNumber, name, probabilities){
                     theseChords.push(chordName)
                 }
             }
+            systemMsg('Chord suggestions returned!')
+            setTimeout(() => $('.systemMsg').empty(), 5000);
         break;
     }
 }
@@ -610,9 +615,6 @@ historySelect.change(function(event){
     // $('<li/>').html(progression.mostCommonAfter2.chords[i]).appendTo('#chordListColumn3');
         $('<li/>').val(progression.mostCommonAfter2.chordIDs[i]).html(`<a data-chord=${progression.mostCommonAfter2.chords[i]} data-chordID=${progression.mostCommonAfter2.chordIDs[i]}>${progression.mostCommonAfter2.chords[i]}</a>`).appendTo('#chordListColumn3');
     }
-
-
-
 })
 
 
