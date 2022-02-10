@@ -263,7 +263,7 @@ $( "#chordListColumn3" ).on("click", function(event) {
 
 })
 function nextChord(chordNumber, degree, name){
-    
+    console.log(chordNumber, degree, name)
     systemMsg('Accessing chord database, please wait...')
     var bearerToken = localStorage.getItem("hookTheoryBearerToken")
     
@@ -483,6 +483,7 @@ saveSessionButton.click(function(event){
     //currentStorage.push(progression);
 
     $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
+    console.log('saving', progression)
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
 });
 
@@ -495,7 +496,7 @@ historySelect.change(function(event){
     //$('#chord1 option:contains('+ currentStorage[returnPosition].chord1.name + ')').prop('selected',true);
     //$(".chordSetup").trigger('event');
     var degree = currentStorage[returnPosition].chord1.degree;
-    
+    console.log('returnedIndex', returnPosition, '\nreturned', currentStorage[returnPosition])
     //console.log(degree, currentStorage[returnPosition].chord1.name);
     
     clearChord2();
