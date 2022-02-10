@@ -524,6 +524,8 @@ historySelect.change(function(event){
     //$('#chord1').val(currentStorage[returnPosition].chord1.name).change();
     //$('#chord1 option:contains('+ currentStorage[returnPosition].chord1.name + ')').prop('selected',true);
     //$(".chordSetup").trigger('event');
+    //progression = currentStorage[returnPosition]
+
     var degree = currentStorage[returnPosition].chord1.degree;
     console.log('returnedIndex', returnPosition, '\nreturned', currentStorage[returnPosition])
     //console.log(degree, currentStorage[returnPosition].chord1.name);
