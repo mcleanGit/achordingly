@@ -231,8 +231,8 @@ $( ".chordSetup" ).change(function(event) {
             // $('.chord2diagram').text('guitar diagram: ' + progression.chord2.numeral)
 
             // now grab suggested chords for column 3 based on selected chord 2
-            chord = Tonal.RomanNumeral.get(num);
-            degree = chord.step + 1
+            // chord = Tonal.RomanNumeral.get(num);
+            // degree = chord.step + 1
             
             // remove diagrams from container
             $( ".chord2DiagramContainer" ).empty();
@@ -247,7 +247,7 @@ $( ".chordSetup" ).change(function(event) {
             diagram(".chord2fretboardSound", progression.chord2.name)
             diagram(".chord2pianoSound", progression.chord2.name)
 
-            nextChord(3, degree, name)
+            nextChord(3, progression.chord2.chordID, progression.chord2.name)
         break
     }
 })
@@ -582,11 +582,15 @@ historySelect.change(function(event){
     // empty the chord2 selectmenu first
     clearChord2()
     // rebuild the chord2 selection menu from progressions
-    for(i=0; i < progression.mostCommonAfter2.chords.length;i++){
-        $('<option/>').html(progression.mostCommonAfter2.chords[i]).appendTo('#chord2');
+    var count = 0
+    for(i=0; i < progression.mostCommonAfter2.chordIDs.length;i++){
+        count++
+        console.log(progression.mostCommonAfter2.chordIDs[i])
+        $('<option/>').val(progression.mostCommonAfter2.chordIDs[i]).html(progression.mostCommonAfter2.chords[i]).appendTo('#chord2');
     }
-    // Select Chord 2 from history    
-    $('<option/>').val(progression.chord2.chordID).html(progression.chord2.name).appendTo('#chord2');
+    
+    // // Select Chord 2 from history    
+    // $('<option/>').val(progression.chord2.chordIDs[count]).html(progression.chord2.name).appendTo('#chord2');
     $('#chord2').val(progression.chord2.chordID);
 
     // remove diagrams from container
