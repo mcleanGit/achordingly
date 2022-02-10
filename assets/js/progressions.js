@@ -398,7 +398,7 @@ function suggestChord(chordNumber, name, probabilities){
                     j++
                 } else {
                     // add chord names to the chord2 dropdown menu
-                    $('<option/>').val(num).html(chordName).appendTo('#chord2');
+                    $('<option/>').val(probabilities[i].chord_ID).html(chordName).appendTo('#chord2');
                     theseChords.push(chordName)
                 }
 
