@@ -483,15 +483,24 @@ saveSessionButton.click(function(event){
     // assigns users assigned name to saved progression object
     progression.userSavedName = $('#savedName').val(); 
 
+    // array of suggestions from column 3
+    var arrayCol3 = [];
+    $('#chordListColumn3 li').each(function(){
+        arrayCol3.push($(this).text())
+    });
+    progression.mostCommonAfter2.chords = arrayCol3;
+    //console.log('col 3',progression.mostCommonAfter2.chords);
+
+    // assigns chord 1 with name of suggested chord
+    progression.chord1.name = $('#chord1 option:selected').text();
+    //console.log($('#chord1 option:selected').text());
+
     // adds new instance of progression to current session array
     currentStorage.push(JSON.parse(JSON.stringify(progression))); 
 
     // adds session to dropdown
     $('<option/>').val(progression.userSavedName).html(progression.userSavedName).appendTo('#HistoryID');
     
-    // assigns chord 1 with name of suggested chord
-    progression.chord1.name = $('#chord1 option:selected').text();
-    console.log($('#chord1 option:selected').text());
     // updates localstorage with new array of saved sessions
     localStorage.setItem('progressionStorage', JSON.stringify(currentStorage));
 });
@@ -559,6 +568,13 @@ historySelect.change(function(event){
     diagram(".chord2piano", progression.chord2.name)
     diagram(".chord2fretboardSound", progression.chord2.name)
     diagram(".chord2pianoSound", progression.chord2.name)    
+
+    // column 3 suggestions
+    //nextChord(3,progression.chord2.degree,progression.chord2.name);
+    $('.chordListColumn3').empty();
+    for(i=0; i < progression.mostCommonAfter2.chords.length;i++){
+    $('<li/>').html(progression.mostCommonAfter2.chords[i]).appendTo('#chordListColumn3');
+    }
 
 
 })
