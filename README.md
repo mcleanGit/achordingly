@@ -25,7 +25,7 @@ And perhaps choose a third chord to add or try a new session.
 Before long, you will begin to develop the dexterity and aural skills to tackle those songs!
 
 ## Screenshot of App
-![Suggested Chords](./assets/images/HowItWorks/SuggestedChords.JPG)
+![Suggested Chords](./assets/images/HowItWorks/Liveapp.png)
 
 ## Link for the repo
 https://github.com/michaelpalumbo/achordingly
