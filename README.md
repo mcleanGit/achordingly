@@ -9,7 +9,7 @@ Aziz: Sketch
 
 William: Javascript
 
-Echeta: Wireframe, HTML, open/flexible
+Echeta: Wireframe, HTML, CSS
 
 Michael: API, Javascript. 
 
