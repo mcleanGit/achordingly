@@ -29,3 +29,6 @@ https://michaelpalumbo.github.io/achordingly
 
 ## Trello board
 https://trello.com/b/7NjWUsJy/cinco-swim-project
+
+
+![](https://github.com/michaelpalumbo/achordingly/blob/main/assets/images/sc.png)
