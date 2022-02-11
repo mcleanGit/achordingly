@@ -18,8 +18,6 @@ Don: UX
 ## Description
 As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords. 
 
-And we soon see that there are chords and chord diagrams that we need to figure out.
-
 a**CHORD**ingly focuses on an important subset skill: putting two or three chords together. You select a chord and practice that. 
 
 Our app then suggests a probable second chord. You can then practice putting the two chords together to build fluency.
