@@ -1,3 +1,22 @@
+/* 
+* MUSIC THEORY BEGIN
+*/
+var keys = {
+    major: ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'],
+    minor: ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B']
+}
+
+// this could be confusing... key & keys refer to the object, not in music theory
+Object.keys(keys).forEach(key => {
+    for(i=0;i<keys[key].length; i++){
+        var quality = key
+        var thisKey = keys[key][i]
+        var text = thisKey + ' ' +  quality
+        var val = thisKey + '_' + quality
+        $('<option/>').val(val).html(text).appendTo('#chord1');
+    }
+})
+
 // User session data
 var progression = {
     userSavedName: "",
@@ -22,6 +41,10 @@ var progression = {
         chordIDs: []
     }
 }
+
+/* 
+* MUSIC THEORY END
+*/
 
 /* 
 * LOGIN/CREDENTIALS BEGIN
@@ -133,23 +156,6 @@ function oAuth(dialog){
 /* 
 * LOGIN/CREDENTIALS END
 */
-
-// MUSIC THEORY STUFF
-var keys = {
-    major: ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'],
-    minor: ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B']
-}
-
-// this will be confusing... key & keys refer to the object, not in music theory
-Object.keys(keys).forEach(key => {
-    for(i=0;i<keys[key].length; i++){
-        var quality = key
-        var thisKey = keys[key][i]
-        var text = thisKey + ' ' +  quality
-        var val = thisKey + '_' + quality
-        $('<option/>').val(val).html(text).appendTo('#chord1');
-    }
-})
 
 /*
 * CHORD SELECTION BEGIN
