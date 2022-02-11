@@ -5,13 +5,13 @@ Cinco Swim
 
 ## Members & Roles
 
-Aziz: CSS, UX, Make it look good
+Aziz: Sketch
 
 William: Javascript
 
-Echeta: HTML, open/flexible
+Echeta: Wireframe, HTML, open/flexible
 
-Michael: API, JS. 
+Michael: API, Javascript. 
 
 Don: UX
 
