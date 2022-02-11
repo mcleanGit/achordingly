@@ -18,6 +18,9 @@ Don: UX
 ## Description
 As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords. 
 
+##
+![Suggested Chords](./assets/images/HowItWorks/SuggestedChords.JPG)
+
 ## Link for the repo
 https://github.com/michaelpalumbo/achordingly
 
