@@ -13,7 +13,7 @@ Echeta: HTML, open/flexible
 
 Michael: API, JS. 
 
-Don: UX, API
+Don: UX
 
 ## Description
 As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords. 
