@@ -1,4 +1,4 @@
-https://michaelpalumbo.github.io/achordingly
+
 
 # Team
 Cinco Swim
@@ -20,5 +20,9 @@ As a beginner guitarist, what are the most common chord changes to know? This ap
 
 ## Link for the repo
 https://github.com/michaelpalumbo/achordingly
+
+## Deployment Link
+https://michaelpalumbo.github.io/achordingly
+
 ## Trello board
 https://trello.com/b/7NjWUsJy/cinco-swim-project
