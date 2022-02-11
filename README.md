@@ -16,9 +16,17 @@ Michael: API, Javascript.
 Don: UX
 
 ## Description
-As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords. Additional information About aCHORDingly and detailed presentation on How It Works is found on those pull-down menus on the deployed link.
+As a beginner guitarist, what are the most common chord changes to know? This app will allow the user to learn the most popular chord patterns in music. Useful for beginners who only know two or three chords. 
 
-##
+And we soon see that there are chords and chord diagrams that we need to figure out.
+
+a**CHORD**ingly focuses on an important subset skill: putting two or three chords together. You select a chord and practice that. 
+
+Our app then suggests a probable second chord. You can then practice putting the two chords together to build fluency.
+And perhaps choose a third chord to add or try a new session.
+Before long, you will begin to develop the dexterity and aural skills to tackle those songs!
+
+## Screenshot of App
 ![Suggested Chords](./assets/images/HowItWorks/SuggestedChords.JPG)
 
 ## Link for the repo
