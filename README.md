@@ -11,7 +11,7 @@ William: Javascript
 
 Echeta: Wireframe, HTML, CSS
 
-Michael: API, Javascript. 
+Michael: Javascript, API.
 
 Don: UX
 
