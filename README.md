@@ -1,7 +1,7 @@
 
 
 # Team
-![Cinco Swim](./assets/images/cincoswim.png) Cinco Swim Solutions
+![Cinco Swim](./assets/images/cincoswim.png | height=50) Cinco Swim Solutions
 
 ## Members & Roles
 
