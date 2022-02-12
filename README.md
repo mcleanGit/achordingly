@@ -4,7 +4,7 @@
 <img src="./assets/images/cincoswim.png" width="50" height="50"> **Cinco Swim Solutions**
 
 ## Application Name ##
-![Achordingly](./assets/images/achordingly.png)
+![Achordingly](./assets/images/aCHORDingly.png)
 
 ## Members & Roles
 
