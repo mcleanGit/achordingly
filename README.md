@@ -1,7 +1,7 @@
 
 
 # Team
-Cinco Swim
+Cinco Swim Solutions
 
 ## Members & Roles
 
@@ -26,6 +26,18 @@ Before long, you will begin to develop the dexterity and aural skills to tackle 
 
 ## Screenshot of App
 ![Suggested Chords](./assets/images/HowItWorks/Liveapp.png)
+
+## Technologies Used
+- HTML
+- Foundation CSS
+- Javascript
+- JQuery
+- Hooktheory AP
+- Chords-Scales API
+- TonalJS
+- EmailJS
+- Asynchronous Development: Trello & Github Issues integration, Slack.
+
 
 ## Link for the repo
 https://github.com/michaelpalumbo/achordingly
