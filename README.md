@@ -1,7 +1,7 @@
 
 
 # Team
-Cinco Swim Solutions
+![Cinco Swim](./assets/images/cincoswim.png =x50) Cinco Swim Solutions
 
 ## Members & Roles
 
@@ -38,7 +38,6 @@ Before long, you will begin to develop the dexterity and aural skills to tackle 
 - EmailJS
 - Asynchronous Development: Trello & Github Issues integration, Slack.
 
-
 ## Link for the repo
 https://github.com/michaelpalumbo/achordingly
 
@@ -47,3 +46,4 @@ https://michaelpalumbo.github.io/achordingly
 
 ## Trello board
 https://trello.com/b/7NjWUsJy/cinco-swim-project
+
