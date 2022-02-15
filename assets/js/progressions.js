@@ -413,7 +413,7 @@ function chord1Diagrams(){
         diagram(".chord1pianoSound", progression.chord1.name)
 }
 
-updateChord2Diagrams(){
+function updateChord2Diagrams(){
     // remove diagrams from container
     $( ".chord2DiagramContainer" ).empty();
     // add/re-add the div diagrams in the DOM
